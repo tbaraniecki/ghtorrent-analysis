@@ -119,7 +119,7 @@ sed -i -e 's/NULL/\N/g' projects.csv
 ```
 
 
-```postgresql
+```sql
 CREATE TABLE users (
 ID int,
 LOGIN varchar,
@@ -135,10 +135,12 @@ STATE varchar,
 CITY varchar,
 LOCATION varchar
 );
+```
 
 
-```postgresql
+```sql
 COPY users FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/users.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
+```
 
 ## 4.2. Implementation of data warehouse.
 
