@@ -2,21 +2,23 @@
 
 study data: http://ghtorrent.org
 
-##Questions
+## Questions
 1. Why projects succeed? 
 2. Why user is successfull? 
 3. Whats programming languages are rising and what programming languages are going to be forget?
 
-##Project team members
+## Project team members
 [Tomasz Baraniecki](https://github.com/tbaraniecki)
+
 [Rafał Wycichowski](https://github.com/Wyci)
+
 [Tomasz Kajdanowicz](https://github.com/kajdanowicz)
 
-#Source description
+# Source description
 
-#User requirements specification
+# User requirements specification
 
-#Dimensional modelling
+# Dimensional modelling
 
 
 
