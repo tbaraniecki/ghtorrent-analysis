@@ -1,7 +1,7 @@
 -- Authors: Rafał Wycichowski, Tomasz Baraniecki
 -- 7
 -- Which languages are growing up and with are falling down?
--- In order to answer this question we will do simple querry that will provide us with results we want
+-- In order to answer this question we will do simple query that will provide us with results we want
 -- 09.2013 - 09.2016
 SELECT 
 l.language as language,
