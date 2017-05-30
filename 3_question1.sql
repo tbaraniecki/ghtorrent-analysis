@@ -59,7 +59,7 @@ CREATE TABLE factsOne (
 SELECT SUM(amount) FROM facts;
 -- answer: 772 090 396
 
--- We count if we correctly created sql querry to select only projects from 10% of most succesfull projects
+-- We count if we correctly created sql query to select only projects from 10% of most succesfull projects
 SELECT SUM(x.amount) FROM(
 SELECT f.name, f.project_id, f.user_id, f.year, f.month, f.language_id, f.amount FROM facts as f, watchersTenPer as w WHERE f.project_id = w.project_id) as x;
 -- answer: 249 973 755
