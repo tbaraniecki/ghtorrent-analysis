@@ -28,7 +28,7 @@ Project is part of Data Warehouses course.
 
 # 3. Design stage
 
-Source data: http://ghtorrent.org - dump from 2017-01
+Source data: http://ghtorrent.org - dump from 2017-01 
 ER Diagram: http://ghtorrent.org/files/schema.pdf
 
 Business Process: 
@@ -42,10 +42,10 @@ Dimensions: user, project, language, time
 Numeric measures for facts: every instance
 
 Hierachies: 
-languages -> name
-time -> year -> month
-project -> id, name
-user -> id, name
+languages -> name 
+time -> year -> month 
+project -> id, name 
+user -> id, name 
 
 We decided that our Data Warehouse will be of star type. 
 
