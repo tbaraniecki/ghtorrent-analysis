@@ -28,7 +28,7 @@ Project is part of Data Warehouses course.
 
 # 3. Design stage
 
-Source data: http://ghtorrent.org - dump from 2017-01 
+Source data: http://ghtorrent.org - dump from 2017-01 -- 
 ER Diagram: http://ghtorrent.org/files/schema.pdf
 
 Business Process: 
@@ -183,7 +183,20 @@ Users - 1 mln records.
 
 
 
+# Languages
 
+## Preparing answear data
+
+### Simple answear 
+
+
+
+### Advanced answear
+
+We exported result of query from table *question3*.
+```sql
+copy (SELECT * FROM question3) TO '/Users/tomek/code/dw/question3.csv' WITH CSV DELIMITER ',' HEADER;
+````
 
 
 
