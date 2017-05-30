@@ -89,7 +89,7 @@ default_statistics_target = 1000
 logging_collector = off
 ```
 
-## Importing source data
+## Preparing source data
 
 We have tables in csv files, where each one represents one table. Our dataset dump is in mysql, so first we create table and then we use postgresql copy command to import data.
 
@@ -118,22 +118,23 @@ Change NULL to \N.
 sed -i -e 's/NULL/\N/g' projects.csv
 ```
 
+## Import source data 
 
 ```sql
 CREATE TABLE users (
-ID int,
-LOGIN varchar,
-COMPANY varchar,
-CREATED_AT timestamp,
-TYPE varchar,
-FAKE smallint,
-DELETED smallint, 
+	ID int,
+	LOGIN varchar,
+	COMPANY varchar,
+	CREATED_AT timestamp,
+	TYPE varchar,
+	FAKE smallint,
+	DELETED smallint, 
 	LONG double precision,
-LAT double precision,
-COUNTRY_CODE char(3),
-STATE varchar,
-CITY varchar,
-LOCATION varchar
+	LAT double precision,
+	COUNTRY_CODE char(3),
+	STATE varchar,
+	CITY varchar,
+	LOCATION varchar
 );
 ```
 
@@ -141,6 +142,8 @@ LOCATION varchar
 ```sql
 COPY users FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/users.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
 ```
+
+
 
 ## 4.2. Implementation of data warehouse.
 
