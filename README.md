@@ -78,7 +78,7 @@ Software: Postgresql 9.6.1, Sublime Text, Google Drive, Terminal
 
 We are using Postgresql with tweaked settings:
 
-```
+```bash
 shared_buffers = 2048MB
 temp_buffers = 1024MB
 work_mem = 4096MB
@@ -87,6 +87,7 @@ dynamic_shared_memory_type = posix
 effective_cache_size = 8GB
 default_statistics_target = 1000
 logging_collector = off
+```
 
 ## Importing source data
 
@@ -99,19 +100,23 @@ We encountered another problem in importing, because github uses null timestamp:
 Due to file sizes we change each file using terminal commands.
 
 Change timestamp to NULL.
-```
+```bash
 sed -i -e 's=“0000-00-00 00:00:00”=\\N=g' commits.csv
+```
 
 Delete the first line of file.
-```
+```bash
 sed -i -e "1d" projects.csv
-
 ```
+
+```bash
 sed -i -e 's/",N"/"\N"/g' projects.csv
+```
 
 Change NULL to \N.
-```
+```bash
 sed -i -e 's/NULL/\N/g' projects.csv
+```
 
 
 ```postgresql
