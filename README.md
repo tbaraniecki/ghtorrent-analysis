@@ -28,8 +28,8 @@ Project is part of Data Warehouses course.
 
 # 3. Design stage
 
-. Source data: http://ghtorrent.org - dump from 2017-01
-. ER Diagram: http://ghtorrent.org/files/schema.pdf
+Source data: http://ghtorrent.org - dump from 2017-01
+ER Diagram: http://ghtorrent.org/files/schema.pdf
 
 Business Process: 
 
