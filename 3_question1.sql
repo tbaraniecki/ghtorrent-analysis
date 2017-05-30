@@ -134,3 +134,4 @@ SELECT name, sum(amount) FROM factsOnePer GROUP BY name;
 -- pull                 |  9933774
 -- issue_assignee       |  9938161
 -- watchers             | 34478828
+
