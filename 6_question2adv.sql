@@ -1,7 +1,7 @@
 -- Authors: Rafał Wycichowski, Tomasz Baraniecki
 -- 6
 -- What makes user succesful?
--- Next results we will obtain by creating only one querry for each results so we can save time.
+-- Next results we will obtain by creating only one query for each results so we can save time.
 -- In order to better analyse the second question we check our database for number of facts for following % of most followed users
 -- all - 1790539 - 1% - 17905,39
 -- 10
