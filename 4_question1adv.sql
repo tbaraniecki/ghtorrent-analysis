@@ -1,7 +1,7 @@
 -- Authors: Rafał Wycichowski, Tomasz Baraniecki
 -- 4
 -- What makes project succesful?
--- Next results we will obtain by creating only one querry for each results so we can save time.
+-- Next results we will obtain by creating only one query for each results so we can save time.
 -- In order to better analyse the first question  we check our database for number of facts for following % of most watched projects:
 -- all - 4234456 
 -- 10
