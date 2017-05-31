@@ -1,15 +1,14 @@
 # Study of success on github based on GHTorrent project
 
-## Table of contents
-0. Authors
-1. Introduction
-2. Questions
-3. 
-
-# 0. Authors
+*Authors*
 * [Tomasz Baraniecki](https://github.com/tbaraniecki)
 * [Rafał Wycichowski](https://github.com/Wyci)
 * supervisor: [Tomasz Kajdanowicz](https://github.com/kajdanowicz)
+
+## Table of contents
+1. [Introduction](#1-introduction)
+2. [Questions](#2-questions)
+3. 
 
 # 1. Introduction
 
@@ -17,7 +16,7 @@ This is study of GHTorrent project data on Wroclaw University of Technology.
 
 # 2. Questions
 
-Our study has to answer those 3 questions: 
+Our study has to answer for:
 
 1. What makes that project succeeded? 
 2. What makes that user succeeded?
@@ -101,7 +100,7 @@ default_statistics_target = 1000
 logging_collector = off
 ```
 
-## Obtaining source data
+## 4.2. Obtaining source data
 
 MySQL database dump of 2017-01-01 (size: 46.48GB, http://ghtorrent.org/downloads.html).
 After untar and unzip we got following files. Each dump csv file represents one table. 
@@ -130,7 +129,7 @@ After untar and unzip we got following files. Each dump csv file represents one 
 | users.csv | 1.22 GB |
 | watchers.csv | 2.05 GB |
 
-## Preparing source data
+## 4.3. Preparing source data
 
 Database dump is in mysql. We created table and then we used postgresql copy command to import data.
 
@@ -153,7 +152,7 @@ Delete first line of dump files which contains header information.
 sed -i -e "1d" projects.csv
 ```
 
-## Import source data 
+## 4.4. Importing source data 
 
 For every table that we needed, we created table and then used copy command.
 
@@ -420,7 +419,9 @@ CREATE TABLE watchers (
 COPY watchers FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/watchers.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
 ```
 
-## 4.2. Implementation of data warehouse.
+# 5. Creating data warehouse
+
+
 
 ```sql
 ```
