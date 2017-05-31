@@ -8,7 +8,21 @@
 ## Table of contents
 1. [Introduction](#1-introduction)
 2. [Questions](#2-questions)
-3. 
+3. [Design Stage](https://github.com/tbaraniecki/ghtorrent-analysis#3-design-stage)
+4. [Preparing data](https://github.com/tbaraniecki/ghtorrent-analysis#4-preparing-data)
+4.1. [Setting up environment](https://github.com/tbaraniecki/ghtorrent-analysis#41-setting-up-environment)
+4.2. [Obtaining source data](https://github.com/tbaraniecki/ghtorrent-analysis#42-obtaining-source-data)
+4.3. [Preparing source data](https://github.com/tbaraniecki/ghtorrent-analysis#43-preparing-source-data)
+4.4. [Importing source data](https://github.com/tbaraniecki/ghtorrent-analysis#44-importing-source-data)
+5. [Creating data warehouse](https://github.com/tbaraniecki/ghtorrent-analysis#5-creating-data-warehouse)
+6. [Project](https://github.com/tbaraniecki/ghtorrent-analysis#6-project)
+6.1. [Quering data](https://github.com/tbaraniecki/ghtorrent-analysis#61-quering-data)
+6.2. [Analysing projects data]()
+7. [Users](https://github.com/tbaraniecki/ghtorrent-analysis#7-quering-data-for-users)
+8. [Programming languages](https://github.com/tbaraniecki/ghtorrent-analysis#8-quering-languages-data)
+8.1. []()
+8.2. []()
+9. Conclusions
 
 # 1. Introduction
 
@@ -601,6 +615,12 @@ ALTER TABLE commits
 DROP COLUMN committer_id;
 ```
 
+Statistics after creating dimensional model
+
+* Facts table contains ~772.000.000 records.
+* Projects - 1 mln records
+* Users - 1 mln records. 
+
 # 6. Project.
 
 ## 6.1. Quering data
@@ -670,7 +690,7 @@ SELECT name, sum(amount) FROM facts GROUP BY name;
 
 
 Firstly we created new tables and then we put answers there, but later we have rewriten queries, so You can skip block below. 
-```
+```sql
 --We create facts table for 10% of most watched projects
 CREATE TABLE factsOne (
 	name char(20),
@@ -1053,9 +1073,366 @@ Fact *watchers* is actually useless for anylysis since we base our best project 
 
 
 
-# 7. Quering data for users
 
 
+# 7. Users
+
+We want to know what makes user succeded? We measure success on number of user followers. We want to study chages in amount of type of facts and their percentage for best users: 10 users, 1%, 4%, 7%, 10%, 13%, 16%, 19%, 22%, 25%. 
+
+## 7.1. Quering data
+
+```sql
+CREATE TABLE followersTenPer (
+	user_id int,
+	sum int
+);
+
+-- We check number of users that are followed
+SELECT count(*) FROM(
+SELECT user_id, sum(amount) as sum FROM facts
+WHERE name LIKE '%follower%'
+GROUP BY user_id
+ORDER BY sum desc) as x;
+-- answer: 1790539
+
+-- We insert 10% of most followed users facts into table followersTenPer
+INSERT INTO followersTenPer
+SELECT user_id, sum(amount) as sum FROM facts
+WHERE name LIKE '%follower%'
+GROUP BY user_id
+ORDER BY sum desc
+LIMIT 179053;
+
+-- We calculate how many types of facts there are in facts table
+SELECT name, sum(amount) FROM facts GROUP BY name;
+
+--         name         |    sum    
+----------------------+-----------
+-- forked               |  14664799
+-- commit               | 502284865
+-- pull_comment         |  10019022
+-- commit_comment       |   3422105
+-- pull                 |  39512989
+-- issue_reporter       |  36672569
+-- issue_assignee       |  36672569
+-- follower             |  11616754
+-- issue_comment        |  62478002
+
+--We create facts table for 10% of most followed users
+CREATE TABLE factsTwo (
+	name char(20),
+	project_id int,
+	user_id int,
+	year smallint,
+	month smallint,
+	language_id varchar,
+	amount int
+);
+
+--We insert results to our new table
+INSERT INTO factsTwo
+SELECT f.name, f.project_id, f.user_id, f.year, f.month, f.language_id, f.amount FROM facts as f, followersTenPer as w WHERE f.user_id = w.user_id;
+
+-- We create table so, we can compare what makes project succesful
+CREATE TABLE FactsTwoDiagram (
+	name char(20),
+	sum int
+);
+
+-- We insert values
+INSERT INTO FactsTwoDiagram
+SELECT name, sum(amount) FROM factsTwo GROUP BY name;
+
+--         name         |    sum    
+------------------------+-----------
+-- issue_reporter       |   7583513
+-- commit               | 146159676
+-- pull_comment         |   6229458
+-- issue_comment        |  34290293
+-- follower             |   7896039
+-- forked               |   3253914
+-- commit_comment       |   1696279
+-- pull                 |  15103606
+-- issue_assignee       |   1168304
+
+
+-- We do the same steps for 1% of most followed users
+
+CREATE TABLE followersOnePer (
+	user_id int,
+	sum int
+);
+
+INSERT INTO followersOnePer
+SELECT user_id, sum(amount) as sum FROM facts
+WHERE name LIKE '%follower%'
+GROUP BY user_id
+ORDER BY sum desc
+LIMIT 17905;
+
+CREATE TABLE factsTwoPer (
+	name char(20),
+	project_id int,
+	user_id int,
+	year smallint,
+	month smallint,
+	language_id varchar,
+	amount int
+);
+
+INSERT INTO factsTwoPer
+SELECT f.name, f.project_id, f.user_id, f.year, f.month, f.language_id, f.amount FROM facts as f, followersOnePer as w WHERE f.user_id = w.user_id;
+
+CREATE TABLE FactsTwoPerDiagram (
+	name char(20),
+	sum int
+);
+
+INSERT INTO FactsTwoPerDiagram
+SELECT name, sum(amount) FROM factsTwoPer GROUP BY name;
+
+--         name         |   sum    
+----------------------+----------
+-- issue_reporter       |  2186028
+-- commit               | 39492783
+-- pull_comment         |  2154402
+-- issue_comment        | 14025246
+-- follower             |  4378478
+-- forked               |   642165
+-- commit_comment       |   566646
+-- pull                 |  4129509
+-- issue_assignee       |   322552
+-- watchers             |  4700116
+```
+
+Next results we will obtain by creating only one query for each results so we can save time. In order to better analyse the second question we check our database for number of facts for following % of most followed users
+* all - 1790539 - 1% - 17905,39
+* 10
+* 4%
+* 7%
+* 13%
+* 16%
+* 19%
+* 22%
+* 25%
+
+```sql
+-- 10 most followed users
+SELECT f.name, sum(f.amount)
+FROM (SELECT user_id, sum(amount) as sum FROM facts
+WHERE name LIKE '%follower%'
+GROUP BY user_id
+ORDER BY sum desc
+LIMIT 10) as p,
+facts as f
+WHERE f.user_id = p.user_id
+GROUP BY f.name
+ORDER BY f.name; 
+
+--         name         |  sum   
+------------------------+--------
+-- commit               | 107941
+-- commit_comment       |   1435
+-- follower             | 197011
+-- forked               |    692
+-- issue_assignee       |    427
+-- issue_comment        |  40724
+-- issue_reporter       |   4235
+-- pull                 |  10250
+-- pull_comment         |   6446
+-- watchers             |   2291
+
+-- time - 1:32
+
+-- 4% of most followed users - 71622 of 1790539
+SELECT f.name, sum(f.amount)
+FROM (SELECT user_id, sum(amount) as sum FROM facts
+WHERE name LIKE '%follower%'
+GROUP BY user_id
+ORDER BY sum desc
+LIMIT 71622) as p,
+facts as f
+WHERE f.user_id = p.user_id
+GROUP BY f.name
+ORDER BY f.name; 
+
+--         name         |   sum    
+------------------------+----------
+-- commit               | 93369401
+-- commit_comment       |  1217832
+-- follower             |  6314126
+-- forked               |  1816848
+-- issue_assignee       |   729335
+-- issue_comment        | 25921331
+-- issue_reporter       |  4764984
+-- pull                 |  9549031
+-- pull_comment         |  4554476
+-- watchers             | 12859749
+ 
+-- time 6:18
+ 
+-- 7% of most followed users - 125338 of 1790539
+SELECT f.name, sum(f.amount)
+FROM (SELECT user_id, sum(amount) as sum FROM facts
+WHERE name LIKE '%follower%'
+GROUP BY user_id
+ORDER BY sum desc
+LIMIT 125338) as p,
+facts as f
+WHERE f.user_id = p.user_id
+GROUP BY f.name
+ORDER BY f.name; 
+
+--         name         |    sum    
+------------------------+-----------
+-- commit               | 122873709
+-- commit_comment       |   1500960
+-- follower             |   7263298
+-- forked               |   2605050
+-- issue_assignee       |    973001
+-- issue_comment        |  30896614
+-- issue_reporter       |   6512953
+-- pull                 |  12945700
+-- pull_comment         |   5460781
+-- watchers             |  18185338
+
+-- time 6:00
+
+-- 13% of most followed users - 232770 of 1790539
+SELECT f.name, sum(f.amount)
+FROM (SELECT user_id, sum(amount) as sum FROM facts
+WHERE name LIKE '%follower%'
+GROUP BY user_id
+ORDER BY sum desc
+LIMIT 232770) as p,
+facts as f
+WHERE f.user_id = p.user_id
+GROUP BY f.name
+ORDER BY f.name; 
+
+--         name         |    sum    
+------------------------+-----------
+-- commit               | 164005529
+-- commit_comment       |   1845159
+-- follower             |   8368352
+-- forked               |   3778149
+-- issue_assignee       |   1320443
+-- issue_comment        |  36921662
+-- issue_reporter       |   8408844
+-- pull                 |  16781906
+-- pull_comment         |   6688960
+-- watchers             |  25612235
+ 
+ -- time - 6:24
+
+-- 16% of most followed users - 286486 of 1790539
+SELECT f.name, sum(f.amount)
+FROM (SELECT user_id, sum(amount) as sum FROM facts
+WHERE name LIKE '%follower%'
+GROUP BY user_id
+ORDER BY sum desc
+LIMIT 286486) as p,
+facts as f
+WHERE f.user_id = p.user_id
+GROUP BY f.name
+ORDER BY f.name; 
+
+--         name         |    sum    
+------------------------+-----------
+-- commit               | 178152668
+-- commit_comment       |   1959978
+-- follower             |   8741205
+-- forked               |   4220847
+-- issue_assignee       |   1435992
+-- issue_comment        |  38848046
+-- issue_reporter       |   9068302
+-- pull                 |  18079758
+-- pull_comment         |   7043038
+-- watchers             |  28243021
+ 
+-- 6:12
+
+-- 19% of most followed users - 340202 of 1790539
+SELECT f.name, sum(f.amount)
+FROM (SELECT user_id, sum(amount) as sum FROM facts
+WHERE name LIKE '%follower%'
+GROUP BY user_id
+ORDER BY sum desc
+LIMIT 340202) as p,
+facts as f
+WHERE f.user_id = p.user_id
+GROUP BY f.name
+ORDER BY f.name; 
+
+--         name         |    sum    
+------------------------+-----------
+-- commit               | 189670954
+-- commit_comment       |   2043777
+-- follower             |   9047495
+-- forked               |   4601049
+-- issue_assignee       |   1533378
+-- issue_comment        |  40364374
+-- issue_reporter       |   9588583
+-- pull                 |  19098225
+-- pull_comment         |   7297286
+-- watchers             |  30406631
+
+-- time - 6:53
+
+-- 22% of most followed users - 393919 of 1790539
+SELECT f.name, sum(f.amount)
+FROM (SELECT user_id, sum(amount) as sum FROM facts
+WHERE name LIKE '%follower%'
+GROUP BY user_id
+ORDER BY sum desc
+LIMIT 393919) as p,
+facts as f
+WHERE f.user_id = p.user_id
+GROUP BY f.name
+ORDER BY f.name; 
+
+--         name         |    sum    
+------------------------+-----------
+-- commit               | 199883665
+-- commit_comment       |   2119784
+-- follower             |   9312934
+-- forked               |   4940084
+-- issue_assignee       |   1609048
+-- issue_comment        |  41698444
+-- issue_reporter       |  10037342
+-- pull                 |  19997862
+-- pull_comment         |   7523420
+-- watchers             |  32229631
+ 
+ -- time - 6:36
+
+-- 25% of most followed users - 447635 of 1790539
+SELECT f.name, sum(f.amount)
+FROM (SELECT user_id, sum(amount) as sum FROM facts
+WHERE name LIKE '%follower%'
+GROUP BY user_id
+ORDER BY sum desc
+LIMIT 447635) as p,
+facts as f
+WHERE f.user_id = p.user_id
+GROUP BY f.name
+ORDER BY f.name; 
+
+--         name         |    sum    
+------------------------+-----------
+-- commit               | 208690036
+-- commit_comment       |   2183772
+-- follower             |   9527798
+-- forked               |   5229716
+-- issue_assignee       |   1678672
+-- issue_comment        |  42921851
+-- issue_reporter       |  10440287
+-- pull                 |  20755030
+-- pull_comment         |   7706993
+-- watchers             |  33656761
+ 
+ -- time - 5:21
+```
 
 # 8. Quering languages data
 
@@ -1302,57 +1679,8 @@ AND a.fact_name = f.name AND b.fact_name = f.name AND c.fact_name = f.name AND d
 ORDER BY l.language, fact_name;
 ```
 
-
-
-
-
-
-## Statistics after creating dimensional model
-
-Facts table contains ~772.000.000 records.
-Projects - 1 mln records
-Users - 1 mln records. 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Languages
-
-## Preparing answear data
-
-### Simple answear 
-
-
-
-### Advanced answear
-
 We exported result of query from table *question3*.
 ```sql
 copy (SELECT * FROM question3) TO '/Users/tomek/code/dw/question3.csv' WITH CSV DELIMITER ',' HEADER;
 ````
-
-
-
-
-
-
-
-
-
-
 
