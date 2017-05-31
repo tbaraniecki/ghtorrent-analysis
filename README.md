@@ -47,24 +47,8 @@ Our study has to answer for:
   <dd>star</dd>
 
   <dt>Hierachies: </dt>
-  <dd>
-* languages -> name 
-* time: year -> month 
-* project: id, name 
-* user: id, name </dd>
+  <dd>time: year -> month</dd>
 </dl>
-
-We decided that our Data Warehouse will be of star type. 
-
-Facts table will include such facts as:
-* commit
-* commit comment
-* pull request
-* follower for user
-* watcher for project
-* issue_comment
-
-Due to size of dataset we decided that we only need amount of each type of fact in monthly period. 
 
 ## Design of data warehouse
 
@@ -152,9 +136,11 @@ Delete first line of dump files which contains header information.
 sed -i -e "1d" projects.csv
 ```
 
+Due to git specification, commit timestamp is based on computer clock. So we have a lot of commits before with years like 1975 and 2018 - 2030.
+
 ## 4.4. Importing source data 
 
-For every table that we needed, we created table and then used copy command.
+We created table and then used copy command.
 
 ```sql
 CREATE TABLE users (
@@ -421,26 +407,27 @@ COPY watchers FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/watchers.csv' DELI
 
 # 5. Creating data warehouse
 
-We created tables for dimensions and fact table. 
+Create tables for dimension and facts.
 
 ```sql
---dimension
+-- dimension
 CREATE TABLE projects_dimension(
 	project_id int,
 	name varchar
 );
 
---dimension
+-- dimension
 CREATE TABLE users_dimension (
 	user_id int,
 	username varchar
 );
 
---dimension
+-- dimension
 CREATE TABLE language_dimension (
 	language varchar,
 );
 
+-- fact
 CREATE TABLE facts (
 	name char(20),
 	project_id int,
@@ -450,7 +437,10 @@ CREATE TABLE facts (
 	language_id varchar,
 	amount int
 );
+```
 
+Inserting dimensions data.
+```sql
 -- projects_dimension
 INSERT INTO projects_dimension (project_id, name)
 SELECT projects.id, projects.name FROM projects;
@@ -464,8 +454,10 @@ INSERT INTO language_dimension (language)
 SELECT language FROM projects GROUP BY language ORDER BY langauge;
 
 ALTER TABLE language_dimension ADD language_id SERIAL PRIMARY KEY;
+```
 
-
+Inserting facts data.
+```sql
 --commits
 INSERT INTO facts 
 SELECT 'commit' as w, 
@@ -599,7 +591,7 @@ GROUP BY (w,p,u,y,m,l)
 ORDER BY count desc;
 ```
 
-We also deleted unneeded data from imported source data, so we could save some disk space.
+We deleted unneeded data from imported source data, so we could save some disk space.
 
 ```sql
 ALTER TABLE commits
@@ -609,15 +601,9 @@ ALTER TABLE commits
 DROP COLUMN committer_id;
 ```
 
-# 6. Quering data for facts related to projects.
+# 6. Project.
 
-We create table in which we insert 10% of most watched projects
-```sql
-CREATE TABLE watchersTenPer (
-	project_id int,
-	sum int
-);
-```
+## 6.1. Quering data
 
 We start from counting how many projects are watched in total.
 ```sql
@@ -627,17 +613,40 @@ WHERE name LIKE '%watchers%'
 GROUP BY project_id
 ORDER BY sum desc) as x;
 ```
-Answer: 4234456
+Answer: 4.234.456. 
 
--- We check best 10% of them
+| amount | count | 
+| --- | ---: |
+| 10 | 10 |
+| 1% | 42 345 |
+| 4% | 169 378 |
+| 7% | 296 412 |
+| 10% | 423 446 |
+| 13% | 550 479 |
+| 16% | 677 513 |
+| 19% | 804 547 |
+| 22% | 931 580 |
+| 25% | 1 058 614 |
+| all | 4 234 456 |
+
+
+We check best 10% of them.
+```sql
+CREATE TABLE watchersTenPer (
+	project_id int,
+	sum int
+);
+
 INSERT INTO watchersTenPer
 SELECT project_id, count(*) as sum FROM facts
 WHERE name LIKE '%watchers%'
 GROUP BY project_id
 ORDER BY sum desc
 LIMIT 423446; -- 423446 is 10% of 4234456
+```
 
--- We want to know how many facts there are for every kind of fact
+We want to know how many facts there are for every kind of fact
+```sql
 CREATE TABLE FactsDiagram (
 	name char(20),
 	sum int
@@ -645,19 +654,23 @@ CREATE TABLE FactsDiagram (
 
 INSERT INTO FactsDiagram
 SELECT name, sum(amount) FROM facts GROUP BY name;
+```
 
---         name         |    sum    
-------------------------+-----------
--- forked               |  14664799
--- commit               | 502284865
--- pull_comment         |  10019022
--- commit_comment       |   3422105
--- pull                 |  39512989
--- issue_reporter       |  36672569
--- issue_assignee       |  36672569
--- watchers             |  54746722
--- issue_comment        |  62478002
+|         name         |    sum    |
+|----------------------|---------:|
+| forked               |  14664799 |
+| commit               | 502284865 |
+| pull_comment         |  10019022 |
+| commit_comment       |   3422105 |
+| pull                 |  39512989 |
+| issue_reporter       |  36672569 |
+| issue_assignee       |  36672569 |
+| watchers             |  54746722 |
+| issue_comment        |  62478002 |
 
+
+Firstly we created new tables and then we put answers there, but later we have rewriten queries, so You can skip block below. 
+```
 --We create facts table for 10% of most watched projects
 CREATE TABLE factsOne (
 	name char(20),
@@ -748,10 +761,300 @@ SELECT name, sum(amount) FROM factsOnePer GROUP BY name;
 -- pull                 |  9933774
 -- issue_assignee       |  9938161
 -- watchers             | 34478828
+```
+
+Next results we will obtain by creating only one query for each results so we can save time.
+In order to better analyse the first question we check our database for number of facts for following % of most watched projects:
+first 10, 1%, 4%, 7%, 10%, 13%, 16%, 19%, 22%, 25%.
+
+
+10 best projects
+```sql
+SELECT f.name, sum(f.amount)
+FROM (SELECT project_id,  count(*) as sum FROM facts
+WHERE name LIKE '%watchers%'
+GROUP BY project_id
+ORDER BY sum desc
+LIMIT 10) as p,
+facts as f
+WHERE f.project_id = p.project_id
+GROUP BY f.name
+ORDER BY f.name; 
+
+--         name         |  sum   
+----------------------+--------
+-- commit               |  53955
+-- commit_comment       |   3667
+-- forked               | 114600
+-- issue_assignee       |  70270
+-- issue_comment        | 264317
+-- issue_reporter       |  70270
+-- pull                 |  65034
+-- pull_comment         |  24276
+-- watchers             | 493874
+
+-- query time - 2:20
+```
+
+1% best projects 42345 of 4 234 456
+```sql
+SELECT f.name, sum(f.amount)
+FROM (SELECT project_id,  count(*) as sum FROM facts
+WHERE name LIKE '%watchers%'
+GROUP BY project_id
+ORDER BY sum desc
+LIMIT 42345) as p,
+facts as f
+WHERE f.project_id = p.project_id
+GROUP BY f.name
+ORDER BY f.name; 
+
+         name         |   sum    
+----------------------+----------
+ commit               | 27729020
+ commit_comment       |   590121
+ forked               |  6325383
+ issue_assignee       |  9938161
+ issue_comment        | 32008558
+ issue_reporter       |  9938161
+ pull                 |  9933774
+ pull_comment         |  4326066
+ watchers             | 34478828
+
+-- query time - 7:54
+```
+
+4% best projects 169 378 of 4 234 456
+```sql
+SELECT f.name, sum(f.amount)
+FROM (SELECT project_id,  count(*) as sum FROM facts
+WHERE name LIKE '%watchers%'
+GROUP BY project_id
+ORDER BY sum desc
+LIMIT 169378) as p,
+facts as f
+WHERE f.project_id = p.project_id
+GROUP BY f.name
+ORDER BY f.name; 
+
+--         name         |   sum    
+----------------------+----------
+-- commit               | 51460177
+-- commit_comment       |   957976
+-- forked               |  8787683
+-- issue_assignee       | 14932963
+-- issue_comment        | 43197602
+-- issue_reporter       | 14932963
+-- pull                 | 14982575
+-- pull_comment         |  5969090
+-- watchers             | 43528455
+
+-- query time - 5:54
+```
+
+7% best projects 296 412 of 4 234 456
+```sql
+ SELECT f.name, sum(f.amount)
+ FROM (SELECT project_id,  count(*) as sum FROM facts
+ WHERE name LIKE '%watchers%'
+ GROUP BY project_id
+ ORDER BY sum desc
+ LIMIT 296412) as p,
+ facts as f
+ WHERE f.project_id = p.project_id
+ GROUP BY f.name
+ ORDER BY f.name; 
+ 
+--         name         |   sum    
+----------------------+----------
+-- commit               | 66072697
+-- commit_comment       |  1095203
+-- forked               |  9699805
+-- issue_assignee       | 17171782
+-- issue_comment        | 47275516
+-- issue_reporter       | 17171782
+-- pull                 | 17305847
+-- pull_comment         |  6642968
+-- watchers             | 46305788
+
+-- query time - 6:31
+```
+
+10% best projects 423 446 of 4 234 456
+```sql
+ SELECT f.name, sum(f.amount)
+ FROM (SELECT project_id,  count(*) as sum FROM facts
+ WHERE name LIKE '%watchers%'
+ GROUP BY project_id
+ ORDER BY sum desc
+ LIMIT 423446) as p,
+ facts as f
+ WHERE f.project_id = p.project_id
+ GROUP BY f.name
+ ORDER BY f.name; 
+ 
+         name         |   sum    
+----------------------+----------
+ commit               | 77957852
+ commit_comment       |  1191045
+ forked               | 10239012
+ issue_assignee       | 18622891
+ issue_comment        | 49618347
+ issue_reporter       | 18622891
+ pull                 | 18891960
+ pull_comment         |  7025753
+ watchers             | 47804004
+
+-- query time - 6:50
+```
+
+13% best projects 550 479 of 4 234 456
+```sql
+SELECT f.name, sum(f.amount)
+FROM (SELECT project_id,  count(*) as sum FROM facts
+WHERE name LIKE '%watchers%'
+GROUP BY project_id
+ORDER BY sum desc
+LIMIT 550479) as p,
+facts as f
+WHERE f.project_id = p.project_id
+GROUP BY f.name
+ORDER BY f.name; 
+
+--         name         |   sum    
+------------------------+----------
+-- commit               | 89195302
+-- commit_comment       |  1286233
+-- forked               | 10611321
+-- issue_assignee       | 19682637
+-- issue_comment        | 51140685
+-- issue_reporter       | 19682637
+-- pull                 | 20029839
+-- pull_comment         |  7314754
+-- watchers             | 48789740
+
+-- query time - 6:24 
+```
+
+16% best projects 677 513 of 4 234 456
+```sql
+SELECT f.name, sum(f.amount)
+FROM (SELECT project_id,  count(*) as sum FROM facts
+WHERE name LIKE '%watchers%'
+GROUP BY project_id
+ORDER BY sum desc
+LIMIT 677513) as p,
+facts as f
+WHERE f.project_id = p.project_id
+GROUP BY f.name
+ORDER BY f.name; 
+--         name         |   sum    
+------------------------+----------
+-- commit               | 98016297
+-- commit_comment       |  1347155
+-- forked               | 10888426
+-- issue_assignee       | 20620420
+-- issue_comment        | 52204942
+-- issue_reporter       | 20620420
+-- pull                 | 20921751
+-- pull_comment         |  7570391
+-- watchers             | 49494892
+
+-- query time - 6:19
+```
+
+19% best projects 804547 of 4 234 456
+```sql
+SELECT f.name, sum(f.amount)
+FROM (SELECT project_id,  count(*) as sum FROM facts
+WHERE name LIKE '%watchers%'
+GROUP BY project_id
+ORDER BY sum desc
+LIMIT 804547) as p,
+facts as f
+WHERE f.project_id = p.project_id
+GROUP BY f.name
+ORDER BY f.name;
+
+--         name         |    sum    
+------------------------+-----------
+-- commit               | 106707997
+-- commit_comment       |   1403791
+-- forked               |  11103236
+-- issue_assignee       |  21299929
+-- issue_comment        |  53042170
+-- issue_reporter       |  21299929
+-- pull                 |  21669761
+-- pull_comment         |   7741251
+-- watchers             |  50044933
+
+-- query time - 6:39
+```
+
+22% best projects 931 580 of 4 234 456
+```sql
+SELECT f.name, sum(f.amount)
+FROM (SELECT project_id,  count(*) as sum FROM facts
+WHERE name LIKE '%watchers%'
+GROUP BY project_id
+ORDER BY sum desc
+LIMIT 931580) as p,
+facts as f
+WHERE f.project_id = p.project_id
+GROUP BY f.name
+ORDER BY f.name;
+
+--         name         |    sum    
+------------------------+-----------
+-- commit               | 114044246
+-- commit_comment       |   1450684
+-- forked               |  11273477
+-- issue_assignee       |  21861461
+-- issue_comment        |  53661676
+-- issue_reporter       |  21861461
+-- pull                 |  22272249
+-- pull_comment         |   7872238
+-- watchers             |  50490747
+
+-- query time 6:11
+```
+
+25% best projects 1 058 614 of 4 234 456
+```sql
+SELECT f.name, sum(f.amount)
+FROM (SELECT project_id,  count(*) as sum FROM facts
+WHERE name LIKE '%watchers%'
+GROUP BY project_id
+ORDER BY sum desc
+LIMIT 1058614) as p,
+facts as f
+WHERE f.project_id = p.project_id
+GROUP BY f.name
+ORDER BY f.name;
+
+--         name         |    sum    
+------------------------+-----------
+-- commit               | 120637829
+-- commit_comment       |   1509909
+-- forked               |  11423644
+-- issue_assignee       |  22376132
+-- issue_comment        |  54195492
+-- issue_reporter       |  22376132
+-- pull                 |  22854817
+-- pull_comment         |   7989733
+-- watchers             |  50871849
+
+-- time 6:20
+```
+
+Fact *watchers* is actually useless for anylysis since we base our best project on amount of watchers fact per project. 
+
+## 8.2. Analysing data. 
 
 
 
 # 7. Quering data for users
+
 
 
 # 8. Quering languages data
@@ -1000,9 +1303,6 @@ ORDER BY l.language, fact_name;
 ```
 
 
-
-
-============================
 
 
 
