@@ -116,28 +116,23 @@ After untar and unzip we got following files. Each dump csv file represents one 
 
 ## Preparing source data
 
-Our dataset dump is in mysql, so first we create table and then we use postgresql copy command to import data.
+Dataset dump is in mysql, so first we create table and then we use postgresql copy command to import data.
 
 We had problem with escaping characters such as \” which caused import to crash and in some cases there were null value so used NULL AS ‘\N’ and ESCAPE AS ‘\’.
-
-```bash
-sed -i -e 's/",N"/"\N"/g' projects.csv
-```
 
 Change NULL to \N.
 ```bash
 sed -i -e 's/NULL/\N/g' projects.csv
 ```
 
-We encountered another problem in importing, because github uses null timestamp: “0000-00-00 00:00:00” to store data for column “update_at” - it meant that the project was never updated so we decided to change it to null. Command below we had to run for every csv file where was timestamp. 
+GitHub uses zero timestamp: “0000-00-00 00:00:00” for column “update_at” - it meant that the project was never updated so we decided to change it to null.
 
-Change timestamp to NULL.
+Change timestamp to \N.
 ```bash
 sed -i -e 's=“0000-00-00 00:00:00”=\\N=g' commits.csv
 ```
 
-
-We needed to delete first line dump file because it contain table column name which we didn't need. 
+Delete first line of dump files which contains header information.
 ```bash
 sed -i -e "1d" projects.csv
 ```
@@ -158,37 +153,15 @@ CREATE TABLE users (
 	LONG double precision,
 	LAT double precision,
 	COUNTRY_CODE char(3),
-	STATE varchar,
-	CITY varchar,
-	LOCATION varchar
-);
-```
-
-
-```sql
-COPY users FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/users.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-
-```sql
-CREATE TABLE users (
-	ID int,
-	LOGIN varchar,
-	COMPANY varchar,
-	CREATED_AT timestamp,
-	TYPE varchar,
-	FAKE smallint,
-	DELETED smallint, 
-	LONG double precision,
-	LAT double precision,
-	COUNTRY_CODE char(3),
 	STATE varchar, 
 	CITY varchar, 
 	LOCATION varchar
 );
-
+```
+```sql
 COPY users FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/users.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
-
+```
+```sql
 CREATE TABLE projects
 (
 	ID int,
@@ -202,9 +175,11 @@ CREATE TABLE projects
 	DELETED smallint,
 	UPDATET_AT timestamp
 );
-
--- COPY projects FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/projects.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
+```
+```sql
+COPY projects FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/projects.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
+```
+```sql
 CREATE TABLE commits
 (
 	ID int,
@@ -214,9 +189,11 @@ CREATE TABLE commits
 	PROJECT_ID int,
 	CREATED_AT timestamp
 );
-
+```
+```sql
 COPY commits FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/commits.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
+```
+```sql
 CREATE TABLE commit_comments(
 	ID int,
 	COMMIT_ID int,
@@ -227,24 +204,30 @@ CREATE TABLE commit_comments(
 	COMMENT_ID int,
 	CREATED_AT timestamp
 );
-
+```
+```sql
 COPY commit_comments FROM ‘/Volumes/Data2/ghtorrent/mysql-2017-01-01/commit_comments.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
+```
+```sql
 CREATE TABLE commit_parents(
 	COMMIT_ID int,
 	PARENT_ID int
 );
-
+```
+```sql
 COPY  FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/commit_parents.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
+```
+```sql
 CREATE TABLE followers(
 	FOLLOWER_ID int,
 	USER_ID int,
 	CREATED_AT timestamp
 );
-
+```
+```sql
 COPY users FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/followers.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
+```
+```sql
 CREATE TABLE pull_requests(
 	ID int,
 	HEAD_REPO_ID int,
@@ -254,9 +237,11 @@ CREATE TABLE pull_requests(
 	PULLREQ_ID int,
 	INTRA_BRANCH smallint
 );
-
+```
+```sql
 COPY pull_requests FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/pull_requests.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
+```
+```sql
 CREATE TABLE issues(
 	ID int,
 	REPO_ID int,
@@ -267,18 +252,22 @@ CREATE TABLE issues(
 	created_at timestamp,
 	issue_id int
 );
-
+```
+```sql
 COPY issues FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/issues.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
+```
+```sql
 CREATE TABLE issue_comments(
 	issue_id int,
 	user_id int,
 	comment_id text,
 	created_at timestamp
 );
-
+```
+```sql
 COPY issue_comments FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/issue_comments.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
+```
+```sql
 CREATE TABLE issue_events (
 	event_id text,
 	issue_id int,
@@ -287,57 +276,71 @@ CREATE TABLE issue_events (
 	action_specific varchar,
 	created_at timestamp
 );
-
+```
+```sql
 COPY issue_events FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/issue_events.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
+```
+```sql
 CREATE TABLE repo_labels(
 	id int,
 	repo_id int,
 	name varchar
 );
-
+```
+```sql
 COPY repo_labels FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/repo_labels.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
+```
+```sql
 CREATE TABLE issue_labels(
 	label_id int,
 	issue_id int
 );
-
+```
+```sql
 COPY issue_labels FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/issue_labels.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
+```
+```sql
 CREATE TABLE organization_members (
 	org_id int,
 	user_id int,
 	created_at timestamp
 );
-
+```
+```sql
 COPY organization_members FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/organization_members.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
+```
+```sql
 CREATE TABLE project_commits (
 	project_id int,
 	commit_id int
 );
-
+```
+```sql
 COPY project_commits FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/project_commits.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
+```
+```sql
 CREATE TABLE project_members (
 	repo_id int,
 	user_id int,
 	created_at timestamp,
 	ext_ref_id varchar
 );
-
+```
+```sql
 COPY project_members FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/project_members.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
+```
+```sql
 CREATE TABLE project_languages (
 	project_id int,
 	language int,
 	bytes int,
 	created_at timestamp
 );
-
+```
+```sql
 COPY project_languages FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/project_languages.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
+```
+```sql
 CREATE TABLE pull_request_comments (
 	pull_request_id int,
 	user_id int,
@@ -347,16 +350,20 @@ CREATE TABLE pull_request_comments (
 	commit_id int,
 	created_at timestamp
 );
-
+```
+```sql
 COPY pull_request_comments FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/pull_request_comments.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
+```
+```sql
 CREATE TABLE pull_request_commits (
 	pull_request_id int,
 	commit_id int
 );
-
+```
+```sql
 COPY pull_request_commits FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/pull_request_commits.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
+```
+```sql
 CREATE TABLE pull_request_history (
 	id int,
 	pull_request_id int,
@@ -364,29 +371,36 @@ CREATE TABLE pull_request_history (
 	action varchar,
 	actor_id int
 );
-
+```
+```sql
 COPY pull_request_history FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/pull_request_history.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
+```
+```sql
 CREATE TABLE repo_milestones(
 	id int,
 	repo_id int,
 	name varchar
 );
-
+```
+```sql
 COPY repo_milestones FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/repo_milestones.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
+```
+```sql
 CREATE TABLE schema_info (
 	version int
 );
-
+```
+```sql
 COPY schema_info FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/schema_info.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-
+```
+```sql
 CREATE TABLE watchers (
 	repo_id int,
 	user_id int,
 	created_at timestamp
 );
-
+```
+```sql
 COPY watchers FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/watchers.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
 ```
 
