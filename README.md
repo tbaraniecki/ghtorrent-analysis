@@ -7,20 +7,20 @@
 3. 
 
 # 0. Authors
-[Tomasz Baraniecki](https://github.com/tbaraniecki)
-
-[Rafał Wycichowski](https://github.com/Wyci)
-
-supervisor: [Tomasz Kajdanowicz](https://github.com/kajdanowicz)
+* [Tomasz Baraniecki](https://github.com/tbaraniecki)
+* [Rafał Wycichowski](https://github.com/Wyci)
+* supervisor: [Tomasz Kajdanowicz](https://github.com/kajdanowicz)
 
 # 1. Introduction
 
-
+This is study of GHTorrent project data on Wroclaw University of Technology.
 
 # 2. Questions
 
-1. What makes that project succeed? 
-2. What makes that user is successfull? 
+Our study has to answer those 3 questions: 
+
+1. What makes that project succeeded? 
+2. What makes that user succeeded?
 3. Whats programming languages are rising and what programming languages are going to be forget?
 
 # 3. Design stage
@@ -36,28 +36,23 @@ supervisor: [Tomasz Kajdanowicz](https://github.com/kajdanowicz)
   <dd></dd>
 
   <dt>Grain</dt>
-  <dd>sum of the same fact that happend in specified month.</dd>
+  <dd>a monthly sum of each fact that occurs when GitHub.com is used by users</dd>
 
-  <dt>Types of fact</dt>
-  <dd>commit, commit_comment, pull_request, pull, issue</dd>
+  <dt>Facts</dt>
+  <dd>commit, commit_comment, watcher, follower, pull, pull_comment, forked, issue_reporter, issue_assignee, issue_comment</dd>
 
   <dt>Dimensions</dt>
-  <dd>user, project, language, time</dd>
+  <dd>user, project, programming language, time</dd>
 
-  <dt></dt>
-  <dd></dd>
-
-  <dt></dt>
-  <dd></dd>
-
-  <dt></dt>
-  <dd></dd>
+  <dt>Data Warehouse scheme</dt>
+  <dd>star</dd>
 
   <dt>Hierachies: </dt>
-  <dd>languages -> name 
-time -> year -> month 
-project -> id, name 
-user -> id, name </dd>
+  <dd>
+* languages -> name 
+* time: year -> month 
+* project: id, name 
+* user: id, name </dd>
 </dl>
 
 We decided that our Data Warehouse will be of star type. 
@@ -70,26 +65,31 @@ Facts table will include such facts as:
 * watcher for project
 * issue_comment
 
-Due to size of dataset we decided that we only need amount of type of facts in monthly period. 
+Due to size of dataset we decided that we only need amount of each type of fact in monthly period. 
 
-Facts table schema: name, project_id, user_id, year, month, language_id, amount
+## Design of data warehouse
 
-user_dim: 
+<dl>
+	<dt>facts</dt>
+  <dd>name, project_id, user_id, year, month, language_id, amount</dd>
 
-project_dim: 
+  <dt>projects_dimension</dt>
+  <dd>project_id, name</dd>
 
-language_dim: 
+  <dt>users_dimension</dt>
+  <dd>user_id, username</dd>
 
+  <dt>language_dimension</dt>
+  <dd>language</dd>
+</dl>
 
 # 4. Preparing data
 
 ## 4.1. Setting up environment
 
-We have choosen to work on Mac, using postresql because it allowed us to work in parallel on data we got.
+Postgresql 9.6.1, Sublime Text, Terminal with ZSH 
 
-Software: MacOS 10.12.5, Postgresql 9.6.1, Sublime Text, SSH.
-
-Because we worked with such big dataset we tweak setting, to speed up queries.
+Tweaked settings
 ```bash
 shared_buffers = 2048MB
 temp_buffers = 1024MB
@@ -103,20 +103,36 @@ logging_collector = off
 
 ## Obtaining source data
 
-We downloaded database from here: http://ghtorrent.org/downloads.html . We have choosen MySQL database dump of 2017-01-01 (size: 46.48GB).
+MySQL database dump of 2017-01-01 (size: 46.48GB, http://ghtorrent.org/downloads.html).
 After untar and unzip we got following files. Each dump csv file represents one table. 
 
 | name | size |
 | --- | --- |
-| commit_comments.csv | 617,4 MB |
-| commit_parents.csv | 9,89 GB |
-| commits.csv | 49,49GB |
-| followers.csv | 412,1 MB |
-| issue_comments.csv | 3,08 GB |
+| commit_comments.csv | 617.4 MB |
+| commit_parents.csv | 9.89 GB |
+| commits.csv | 49.49 GB |
+| followers.csv | 412.1 MB |
+| issue_comments.csv | 3.08 GB |
+| issue_events.csv | 3.63 GB |
+| issue_labels.csv | 198.6 MB |
+| issess.csv | 2.15 GB |
+| organizational_members.csv | 13.7 MB |
+| project_commits.csv | 86.96 GB |
+| project_languages.csv | 3.21 GB | 
+| project_members.csv | 449.4 MB |
+| projects.csv | 6.99 GB |
+| pull_request_comments.csv | 1.67 GB |
+| pull_request_commits.csv | 1.53 GB |
+| pull_request_history.csv | 2.24 GB |
+| pull_request.csv | 835.6 MB |
+| repo_labels.csv | 3.08 GB |
+| repo_milestones.csv | 0 |
+| users.csv | 1.22 GB |
+| watchers.csv | 2.05 GB |
 
 ## Preparing source data
 
-Dataset dump is in mysql, so first we create table and then we use postgresql copy command to import data.
+Database dump is in mysql. We created table and then we used postgresql copy command to import data.
 
 We had problem with escaping characters such as \” which caused import to crash and in some cases there were null value so used NULL AS ‘\N’ and ESCAPE AS ‘\’.
 
@@ -139,7 +155,7 @@ sed -i -e "1d" projects.csv
 
 ## Import source data 
 
-We had to create tables in order to import from CSV files.
+For every table that we needed, we created table and then used copy command.
 
 ```sql
 CREATE TABLE users (
@@ -406,6 +422,8 @@ COPY watchers FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/watchers.csv' DELI
 
 ## 4.2. Implementation of data warehouse.
 
+```sql
+```
 
 
 
