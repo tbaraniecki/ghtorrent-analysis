@@ -421,18 +421,349 @@ COPY watchers FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/watchers.csv' DELI
 
 # 5. Creating data warehouse
 
-
+We created tables for dimensions and fact table. 
 
 ```sql
+--dimension
+CREATE TABLE projects_dimension(
+	project_id int,
+	name varchar
+);
+
+--dimension
+CREATE TABLE users_dimension (
+	user_id int,
+	username varchar
+);
+
+--dimension
+CREATE TABLE language_dimension (
+	language varchar,
+);
+
+CREATE TABLE facts (
+	name char(20),
+	project_id int,
+	user_id int,
+	year smallint,
+	month smallint,
+	language_id varchar,
+	amount int
+);
+
+-- projects_dimension
+INSERT INTO projects_dimension (project_id, name)
+SELECT projects.id, projects.name FROM projects;
+
+-- users_dimension
+INSERT INTO users_dimension (user_id, name)
+SELECT users.id, users.name FROM users;
+
+-- language_dimension
+INSERT INTO language_dimension (language)
+SELECT language FROM projects GROUP BY language ORDER BY langauge;
+
+ALTER TABLE language_dimension ADD language_id SERIAL PRIMARY KEY;
+
+
+--commits
+INSERT INTO facts 
+SELECT 'commit' as w, 
+commits.project_id as p, 
+commits.committer_id as u, 
+EXTRACT(YEAR FROM commits.created_at) as y, 
+EXTRACT(MONTH FROM commits.created_at) as m, 
+projects.language as l, 
+COUNT(*) as count 
+FROM commits, projects 
+where projects.id = commits.project_id GROUP BY (w,p,u,y,m,l) ORDER BY count desc;
+
+--commit_comment
+INSERT INTO facts 
+SELECT 'commit_comment' as w, 
+commits.project_id as p, 
+commit_comments.user_id as u,
+EXTRACT(YEAR FROM commit_comments.created_at) as y, 
+EXTRACT(MONTH FROM commit_comments.created_at) as m, 
+projects.language as l, 
+COUNT(*) as count 
+FROM commit_comments, projects, commits
+WHERE projects.id = commits.project_id AND commit_comments.commit_id = commits.id
+GROUP BY (w,p,u,y,m,l) 
+ORDER BY count desc;
+
+--watchers
+INSERT INTO facts 
+SELECT 'watchers' as w, 
+watchers.repo_id as p, 
+watchers.user_id as u, 
+EXTRACT(YEAR FROM watchers.created_at) as y, 
+EXTRACT(MONTH FROM watchers.created_at) as m, 
+projects.language as l, 
+COUNT(*) as count FROM watchers, 
+projects where projects.id = watchers.repo_id GROUP BY (w,p,u,y,m,l);
+
+--followers
+INSERT INTO facts 
+SELECT 'follower' as f,
+-1 as p, 
+followers.user_id as u, 
+EXTRACT(YEAR FROM followers.created_at) as y, 
+EXTRACT(MONTH FROM followers.created_at) as m, 
+'\N' as l, 
+COUNT(*) as c
+FROM followers GROUP BY (f,p,u,y,m,l) ORDER BY c desc;
+
+--pull
+INSERT INTO facts 
+SELECT 'pull' as w, 
+pull_requests.base_repo_id as p,
+commits.committer_id as u,
+EXTRACT(YEAR FROM pull_request_history.created_at) as y, 
+EXTRACT(MONTH FROM pull_request_history.created_at) as m, 
+projects.language as l, 
+COUNT(*) as count 
+FROM pull_requests, projects, commits, pull_request_history
+WHERE projects.id = pull_requests.base_repo_id AND pull_request.head_commit_id = commits.id AND pull_request_history.pull_request_id = pull_request.id
+GROUP BY (w,p,u,y,m,l) 
+ORDER BY count desc;
+
+--pull_comment
+INSERT INTO facts 
+SELECT 'pull_comment' as w, 
+pull_requests.base_repo_id as p,
+pull_request_comments.user_id as u,
+EXTRACT(YEAR FROM pull_request_comments.created_at) as y, 
+EXTRACT(MONTH FROM pull_request_comments.created_at) as m, 
+projects.language as l, 
+COUNT(*) as count 
+FROM pull_request_comments, projects, pull_requests
+WHERE projects.id = pull_requests.base_repo_id AND pull_requests.id = pull_request_comments.pull_request_id
+GROUP BY (w,p,u,y,m,l) 
+ORDER BY count desc;
+
+--forked
+INSERT INTO facts 
+SELECT 'forked' as w, 
+p2.forked_from as p,
+p2.owner_id as u,
+EXTRACT(YEAR FROM p2.created_at) as y, 
+EXTRACT(MONTH FROM p2.created_at) as m, 
+p2.language as l, 
+COUNT(*) as count 
+FROM projects as p1, projects as p2
+WHERE p1.id = p2.forked_from
+GROUP BY (w,p,u,y,m,l) 
+ORDER BY count desc;
+
+--issue_reporter
+INSERT INTO facts 
+SELECT 'issue_reporter' as w, 
+issues.repo_id as p,
+issues.reporter_id as u,
+EXTRACT(YEAR FROM issues.created_at) as y, 
+EXTRACT(MONTH FROM issues.created_at) as m, 
+projects.language as l, 
+COUNT(*) as count 
+FROM issues, projects
+WHERE projects.id = issues.repo_id
+GROUP BY (w,p,u,y,m,l) 
+ORDER BY count desc;
+
+--issue_assignee
+INSERT INTO facts 
+SELECT 'issue_assignee' as w, 
+issues.repo_id as p,
+issues.assignee_id as u,
+EXTRACT(YEAR FROM issues.created_at) as y, 
+EXTRACT(MONTH FROM issues.created_at) as m, 
+projects.language as l, 
+COUNT(*) as count 
+FROM issues, projects
+WHERE projects.id = issues.repo_id
+GROUP BY (w,p,u,y,m,l) 
+ORDER BY count desc;
+
+--issue_comment
+INSERT INTO facts 
+SELECT 'issue_comment' as w, 
+issues.repo_id as p,
+issue_comments.user_id as u,
+EXTRACT(YEAR FROM issue_comments.created_at) as y, 
+EXTRACT(MONTH FROM issue_comments.created_at) as m, 
+projects.language as l, 
+COUNT(*) as count 
+FROM issues, projects, issue_comments
+WHERE projects.id = issues.repo_id AND issues.id = issue_comments.issue_id
+GROUP BY (w,p,u,y,m,l) 
+ORDER BY count desc;
 ```
 
+We also deleted unneeded data from imported source data, so we could save some disk space.
+
+```sql
+ALTER TABLE commits
+DROP COLUMN sha;
+
+ALTER TABLE commits
+DROP COLUMN committer_id;
+```
+
+# 6. Quering data for facts related to projects.
+
+We create table in which we insert 10% of most watched projects
+```sql
+CREATE TABLE watchersTenPer (
+	project_id int,
+	sum int
+);
+```
+
+We start from counting how many projects are watched in total.
+```sql
+SELECT count(*) FROM (
+SELECT project_id, count(*) as sum FROM facts
+WHERE name LIKE '%watchers%'
+GROUP BY project_id
+ORDER BY sum desc) as x;
+```
+Answer: 4234456
+
+-- We check best 10% of them
+INSERT INTO watchersTenPer
+SELECT project_id, count(*) as sum FROM facts
+WHERE name LIKE '%watchers%'
+GROUP BY project_id
+ORDER BY sum desc
+LIMIT 423446; -- 423446 is 10% of 4234456
+
+-- We want to know how many facts there are for every kind of fact
+CREATE TABLE FactsDiagram (
+	name char(20),
+	sum int
+);
+
+INSERT INTO FactsDiagram
+SELECT name, sum(amount) FROM facts GROUP BY name;
+
+--         name         |    sum    
+------------------------+-----------
+-- forked               |  14664799
+-- commit               | 502284865
+-- pull_comment         |  10019022
+-- commit_comment       |   3422105
+-- pull                 |  39512989
+-- issue_reporter       |  36672569
+-- issue_assignee       |  36672569
+-- watchers             |  54746722
+-- issue_comment        |  62478002
+
+--We create facts table for 10% of most watched projects
+CREATE TABLE factsOne (
+	name char(20),
+	project_id int,
+	user_id int,
+	year smallint,
+	month smallint,
+	language_id varchar,
+	amount int
+);
+
+-- We count how many facts we got in total
+SELECT SUM(amount) FROM facts;
+-- answer: 772 090 396
+
+-- We count if we correctly created sql query to select only projects from 10% of most succesfull projects
+SELECT SUM(x.amount) FROM(
+SELECT f.name, f.project_id, f.user_id, f.year, f.month, f.language_id, f.amount FROM facts as f, watchersTenPer as w WHERE f.project_id = w.project_id) as x;
+-- answer: 249 973 755
+
+-- We insert results to our new table
+INSERT INTO factsOne
+SELECT f.name, f.project_id, f.user_id, f.year, f.month, f.language_id, f.amount FROM facts as f, watchersTenPer as w WHERE f.project_id = w.project_id;
+
+-- We create table, so we can compare what makes project succesful
+CREATE TABLE FactsOneDiagram (
+	name char(20),
+	sum int
+);
+
+-- We insert results
+INSERT INTO FactsOneDiagram
+SELECT name, sum(amount) FROM factsOne GROUP BY name;
+
+--         name         |   sum    
+----------------------+----------
+-- issue_reporter       | 18622891
+-- commit               | 77957852
+-- pull_comment         |  7025753
+-- issue_comment        | 49618347
+-- forked               | 10239012
+-- commit_comment       |  1191045
+-- pull                 | 18891960
+-- issue_assignee       | 18622891
+-- watchers             | 47804004
+
+-- We do the same steps in order to calculate fact diagram for 1% of most watched projects
+CREATE TABLE watchersOnePer (
+	project_id int,
+	sum int
+);
+
+INSERT INTO watchersOnePer
+SELECT project_id, count(*) as sum FROM facts
+WHERE name LIKE '%watchers%'
+GROUP BY project_id
+ORDER BY sum desc
+LIMIT 42345;
+
+CREATE TABLE factsOnePer (
+	name char(20),
+	project_id int,
+	user_id int,
+	year smallint,
+	month smallint,
+	language_id varchar,
+	amount int
+);
+
+INSERT INTO factsOnePer
+SELECT f.name, f.project_id, f.user_id, f.year, f.month, f.language_id, f.amount FROM facts as f, watchersOnePer as w WHERE f.project_id = w.project_id;
+
+CREATE TABLE FactsOnePerDiagram (
+	name char(20),
+	sum int
+);
+INSERT INTO FactsOnePerDiagram
+SELECT name, sum(amount) FROM factsOnePer GROUP BY name;
+
+--         name         |   sum    
+----------------------+----------
+-- issue_reporter       |  9938161
+-- commit               | 27729020
+-- pull_comment         |  4326066
+-- issue_comment        | 32008558
+-- forked               |  6325383
+-- commit_comment       |   590121
+-- pull                 |  9933774
+-- issue_assignee       |  9938161
+-- watchers             | 34478828
+
+
+
+# 7. Quering data for users
+
+
+# 8. Quering languages data
+
+Which languages are growing up and with are falling down?
+
+In order to answer this question we will do simple query that will provide us with results we want in date range: 09.2013 - 09.2016
 
 
 
 
-
-
-
+============================
 
 
 

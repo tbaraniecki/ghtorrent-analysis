@@ -134,9 +134,6 @@ WHERE p1.id = p2.forked_from
 GROUP BY (w,p,u,y,m,l) 
 ORDER BY count desc;
 
-issue
-issue_comment
-
 --issue_reporter
 INSERT INTO facts 
 SELECT 'issue_reporter' as w, 
