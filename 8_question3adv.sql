@@ -6,13 +6,12 @@
 -- We want to see if our main query is correct by checking this:
 (SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2013 AND month=9 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as a,
 
-
 -- We want to see if our main query is correct by checking this:
 SELECT l.language, f.name as fact_name, 0 
 FROM language_dimension as l, fact_names as f
 ORDER BY (l.language, f.name);
 
--- We create table of fact names so we can easly access it in main query
+-- We create table of fact names so we can easly access it in main query and export it to csv
 CREATE TABLE fact_names(
 	name char(20)
 )
