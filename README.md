@@ -242,6 +242,10 @@ We put that data into Excel and calculate more data.
 |pull|5.68%|8.68%|8.76%|8.87%|9.01%|9.15%|9.34%|9.49%|9.65%|9.86%|9.76%|
 |pull_comment|1.44%|3.03%|3.10%|3.17%|3.26%|3.34%|3.48%|3.64%|3.85%|4.29%|3.64%|
 
+### Percentage of change in comparison to all projects
+
+
+
 ### Average of each fact per project.
 [question1_facts_amount_per_project.csv](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_facts_percentage.csv)
 
@@ -273,13 +277,33 @@ As we can see on chart above for all projects commits takes to 72% facts. When n
 
 ![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_issue_comment.png "Average amout of issue comment per project")
 
-![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_issue_reporter.png "Average amout of issue reporter per project")
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_issue_count.png "Average amout of issues per project")
 
 ![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_pull.png "Average amout of pull per project")
 
 ![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_pull_comment.png "Average amout of pull_comment per project")
 
-As we can see in our results amount of issue_assignee and issue_reporter is the same - this is no error. For every issue there can only be one reporter (user who created the issue) and one assigned user. So we can conclude that amount of issue_assignee is equal to amout of issues.  
+As we can see, for better projects, average count of each fact is rising, there is more work around them. 
+
+Amount of issue_assignee and issue_reporter is the same - this is no error. For every issue there can only be one reporter (user who created the issue) and one assigned user. So we can conclude (project perspective) that amount of issue_assignee is equal to amout of issues.  
+
+### Percentage of changes when looking for facts in comparison to all projects
+
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_change_comments_per_commit.png "Change in comments per commits")
+
+Best projects more than double comments per commit count.
+
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_change_comments_per_issue.png "Change in comments per issue")
+
+When we take 25% best we see that amount of comments per issue rises only half, so this will not help us determine what give success for project. 
+
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_change_fork_count.png "Change in fork count")
+
+As we can see fork count is significant bigger for best projects - 5 times or even more than 37 times! This on definetely counts as facts that can determine if project succeded.
+
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_change_commit_per_fork.png "Change in commits per fork")
+
+Based on our experience we can say that when project gets bigger forking is used to deliver smaller funcionalities. When comes to open source projects on GitHub we are using successfull one, we fork it to use as our own and not to make a lot of changes and then 
 
 ## 6.4. Conlusion of successfull project
 
@@ -288,8 +312,9 @@ We can easly say that whem your project reaches As we can see from charts above,
 Based on data we have all successfull project have in common following:
 - better than 1/8 ratio fork / commit.
 - at least 3 comments per issue
-- 9% of facts concerning project is about merging new features to master branch.
-- in project adding new code is responsible for only up to 33% of facts.
+- 9% of facts concerning project is about merging new features to master branch. (pull)
+- in project adding new code is responsible for only up to 33% of facts
+- at least 300 commits 
 
 Success of the project is not from good new code, but mostly from collaboration between users and feedback from the ones who are actively using it.
 
@@ -367,10 +392,19 @@ We put that data into Excel and calculate more data.
 |pull_comment|6|17|19|21|25|29|35|44|64|120|645|
 |sum|394|669|731|806|903|1030|1203|1466|1982|3548|17215|
 
+### Percentage of amount change for facts 
 
 ## 7.3. Analysing the data
 
-![alt text]( "Average amout of  per project")
+![alt text]( "Percentage distribution of facts concerning the user")
+
+For every fact we will check value change when compared to base value which is value for all users. 
+
+
+
+
+## 7.4. Conclusions on the project
+
 
 # 8. Languages
 
