@@ -26,15 +26,34 @@
 
 # 1. Introduction
 
-This is study of GHTorrent project data on Wroclaw University of Technology.
+This is study of GHTorrent project data on Wroclaw University of Technology. 
 
-# 2. Questions
+> GHTorrent monitors the Github public event time line. For each event, it retrieves its contents and their dependencies, exhaustively.
+
+# 2. The problem
 
 Our study has to answer for:
 
 1. What makes that project succeeded? 
 2. What makes that user succeeded?
 3. Whats programming languages are rising and what programming languages are going to be forget?
+
+We decided that we will analyze some of the events that occur when developers are using GitHub. 
+As we know, GitHub is repository, as well as project management tool. GitHub is using git, which is distributed repository system. 
+In the table below we wrote events which we are interested in and what they mean for us. For the purpose of this raport we will call those events as facts.
+
+| name | project perspective | user perspective | language perspective |
+| --- | --- | --- | --- |
+| commit | project is maintained | user is programming | language is used |
+| commit_comments | project has more than one developer and code that is being created is checked | user supervises other user | language is very actively used |
+| watchers | user found project interested for him | ... | users are interested in projects in this specific language |
+| followers | ... | other users are interested in his public activity on github | ... |
+| forked | users found this project very interesting and want to develop new feature | user is working on new feature | language is very actively used |
+| issue_assignee | some user was assigned to solve issue | user was assigned to solve issue | language is actively used |
+| issue_comment | it means that there is discussion on project issue  | user is participating in discussion on issue | language is actively used |
+| issue_reporter | user added issue for project | user is actively participating in maintaining project | language is actively used |
+| pull | possible discussion on changes pushed to repository | user wants to tell other users of repo about changes he made to repo | language is actively used |
+| pull_comment | there is review and discussion on potential changes that could be merged into main branch of project | user is discussing on new feature | language is very actively used |
 
 # 3. Design stage
 
@@ -46,10 +65,10 @@ Our study has to answer for:
   <dd>http://ghtorrent.org/files/schema.pdf</dd>
 
   <dt>Business Process</dt>
-  <dd></dd>
+  <dd>Developing software</dd>
 
   <dt>Grain</dt>
-  <dd>a monthly sum of each fact that occurs when GitHub.com is used by users</dd>
+  <dd>a monthly sum of choosen facts that occurs on GitHub.com</dd>
 
   <dt>Facts</dt>
   <dd>commit, commit_comment, watcher, follower, pull, pull_comment, forked, issue_reporter, issue_assignee, issue_comment</dd>
@@ -84,7 +103,7 @@ Our study has to answer for:
 
 ## 4.1. Setting up environment
 
-Postgresql 9.6.1, Sublime Text, Terminal with ZSH 
+Postgresql 9.6.1, Sublime Text, Terminal (ZSH)
 
 Tweaked settings
 ```bash
@@ -101,7 +120,7 @@ logging_collector = off
 ## 4.2. Obtaining source data
 
 MySQL database dump of 2017-01-01 (size: 46.48GB, http://ghtorrent.org/downloads.html).
-After untar and unzip we got following files. Each dump csv file represents one table. 
+After untar and ungzip we got following files. Each dump csv file represents one table. 
 
 | name | size |
 | --- | --- |
@@ -154,1287 +173,102 @@ Due to git specification, commit timestamp is based on computer clock. So we hav
 
 ## 4.4. Importing source data 
 
-We created table and then used copy command.
+We created tables and then used copy command.
 
-```sql
-CREATE TABLE users (
-	ID int,
-	LOGIN varchar,
-	COMPANY varchar,
-	CREATED_AT timestamp,
-	TYPE varchar,
-	FAKE smallint,
-	DELETED smallint, 
-	LONG double precision,
-	LAT double precision,
-	COUNTRY_CODE char(3),
-	STATE varchar, 
-	CITY varchar, 
-	LOCATION varchar
-);
-```
-```sql
-COPY users FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/users.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE projects
-(
-	ID int,
-	URL varchar,
-	OWNER_ID int,
-	NAME varchar,
-	DESCRIPTION varchar,
-	LANGUAGE varchar,
-	CREATED_AT timestamp,
-	FORKED_FROM int,
-	DELETED smallint,
-	UPDATET_AT timestamp
-);
-```
-```sql
-COPY projects FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/projects.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE commits
-(
-	ID int,
-	SHA varchar,
-	AUTHOR_ID int,
-	COMMITTER_ID int,
-	PROJECT_ID int,
-	CREATED_AT timestamp
-);
-```
-```sql
-COPY commits FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/commits.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE commit_comments(
-	ID int,
-	COMMIT_ID int,
-	USER_ID int,
-	BODY varchar,
-	LINE int,
-	POSITION int,
-	COMMENT_ID int,
-	CREATED_AT timestamp
-);
-```
-```sql
-COPY commit_comments FROM ‘/Volumes/Data2/ghtorrent/mysql-2017-01-01/commit_comments.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE commit_parents(
-	COMMIT_ID int,
-	PARENT_ID int
-);
-```
-```sql
-COPY  FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/commit_parents.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE followers(
-	FOLLOWER_ID int,
-	USER_ID int,
-	CREATED_AT timestamp
-);
-```
-```sql
-COPY users FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/followers.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE pull_requests(
-	ID int,
-	HEAD_REPO_ID int,
-	BASE_REPO_ID int,
-	HEAD_COMMIT_ID int,
-	BASE_COMMIT_ID int,
-	PULLREQ_ID int,
-	INTRA_BRANCH smallint
-);
-```
-```sql
-COPY pull_requests FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/pull_requests.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE issues(
-	ID int,
-	REPO_ID int,
-	REPORTER_ID int,
-	assignee_id int,
-	pull_request int,
-	pull_request_id int,
-	created_at timestamp,
-	issue_id int
-);
-```
-```sql
-COPY issues FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/issues.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE issue_comments(
-	issue_id int,
-	user_id int,
-	comment_id text,
-	created_at timestamp
-);
-```
-```sql
-COPY issue_comments FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/issue_comments.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE issue_events (
-	event_id text,
-	issue_id int,
-	actor_id int,
-	action varchar,
-	action_specific varchar,
-	created_at timestamp
-);
-```
-```sql
-COPY issue_events FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/issue_events.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE repo_labels(
-	id int,
-	repo_id int,
-	name varchar
-);
-```
-```sql
-COPY repo_labels FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/repo_labels.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE issue_labels(
-	label_id int,
-	issue_id int
-);
-```
-```sql
-COPY issue_labels FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/issue_labels.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE organization_members (
-	org_id int,
-	user_id int,
-	created_at timestamp
-);
-```
-```sql
-COPY organization_members FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/organization_members.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE project_commits (
-	project_id int,
-	commit_id int
-);
-```
-```sql
-COPY project_commits FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/project_commits.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE project_members (
-	repo_id int,
-	user_id int,
-	created_at timestamp,
-	ext_ref_id varchar
-);
-```
-```sql
-COPY project_members FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/project_members.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE project_languages (
-	project_id int,
-	language int,
-	bytes int,
-	created_at timestamp
-);
-```
-```sql
-COPY project_languages FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/project_languages.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE pull_request_comments (
-	pull_request_id int,
-	user_id int,
-	comment_id int,
-	position_id int,
-	body varchar,
-	commit_id int,
-	created_at timestamp
-);
-```
-```sql
-COPY pull_request_comments FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/pull_request_comments.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE pull_request_commits (
-	pull_request_id int,
-	commit_id int
-);
-```
-```sql
-COPY pull_request_commits FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/pull_request_commits.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE pull_request_history (
-	id int,
-	pull_request_id int,
-	created_at timestamp,
-	action varchar,
-	actor_id int
-);
-```
-```sql
-COPY pull_request_history FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/pull_request_history.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE repo_milestones(
-	id int,
-	repo_id int,
-	name varchar
-);
-```
-```sql
-COPY repo_milestones FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/repo_milestones.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE schema_info (
-	version int
-);
-```
-```sql
-COPY schema_info FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/schema_info.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
-```sql
-CREATE TABLE watchers (
-	repo_id int,
-	user_id int,
-	created_at timestamp
-);
-```
-```sql
-COPY watchers FROM '/Volumes/Data2/ghtorrent/mysql-2017-01-01/watchers.csv' DELIMITER ',' NULL AS '\N' ESCAPE AS '\' CSV;
-```
+[SQL queries for importing data](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/1_import.sql)
 
 # 5. Creating data warehouse
 
-Create tables for dimension and facts.
-
-```sql
--- dimension
-CREATE TABLE projects_dimension(
-	project_id int,
-	name varchar
-);
-
--- dimension
-CREATE TABLE users_dimension (
-	user_id int,
-	username varchar
-);
-
--- dimension
-CREATE TABLE language_dimension (
-	language varchar,
-);
-
--- fact
-CREATE TABLE facts (
-	name char(20),
-	project_id int,
-	user_id int,
-	year smallint,
-	month smallint,
-	language_id varchar,
-	amount int
-);
-```
-
-Inserting dimensions data.
-```sql
--- projects_dimension
-INSERT INTO projects_dimension (project_id, name)
-SELECT projects.id, projects.name FROM projects;
-
--- users_dimension
-INSERT INTO users_dimension (user_id, name)
-SELECT users.id, users.name FROM users;
-
--- language_dimension
-INSERT INTO language_dimension (language)
-SELECT language FROM projects GROUP BY language ORDER BY langauge;
-
-ALTER TABLE language_dimension ADD language_id SERIAL PRIMARY KEY;
-```
-
-Inserting facts data.
-```sql
---commits
-INSERT INTO facts 
-SELECT 'commit' as w, 
-commits.project_id as p, 
-commits.committer_id as u, 
-EXTRACT(YEAR FROM commits.created_at) as y, 
-EXTRACT(MONTH FROM commits.created_at) as m, 
-projects.language as l, 
-COUNT(*) as count 
-FROM commits, projects 
-where projects.id = commits.project_id GROUP BY (w,p,u,y,m,l) ORDER BY count desc;
-
---commit_comment
-INSERT INTO facts 
-SELECT 'commit_comment' as w, 
-commits.project_id as p, 
-commit_comments.user_id as u,
-EXTRACT(YEAR FROM commit_comments.created_at) as y, 
-EXTRACT(MONTH FROM commit_comments.created_at) as m, 
-projects.language as l, 
-COUNT(*) as count 
-FROM commit_comments, projects, commits
-WHERE projects.id = commits.project_id AND commit_comments.commit_id = commits.id
-GROUP BY (w,p,u,y,m,l) 
-ORDER BY count desc;
-
---watchers
-INSERT INTO facts 
-SELECT 'watchers' as w, 
-watchers.repo_id as p, 
-watchers.user_id as u, 
-EXTRACT(YEAR FROM watchers.created_at) as y, 
-EXTRACT(MONTH FROM watchers.created_at) as m, 
-projects.language as l, 
-COUNT(*) as count FROM watchers, 
-projects where projects.id = watchers.repo_id GROUP BY (w,p,u,y,m,l);
-
---followers
-INSERT INTO facts 
-SELECT 'follower' as f,
--1 as p, 
-followers.user_id as u, 
-EXTRACT(YEAR FROM followers.created_at) as y, 
-EXTRACT(MONTH FROM followers.created_at) as m, 
-'\N' as l, 
-COUNT(*) as c
-FROM followers GROUP BY (f,p,u,y,m,l) ORDER BY c desc;
-
---pull
-INSERT INTO facts 
-SELECT 'pull' as w, 
-pull_requests.base_repo_id as p,
-commits.committer_id as u,
-EXTRACT(YEAR FROM pull_request_history.created_at) as y, 
-EXTRACT(MONTH FROM pull_request_history.created_at) as m, 
-projects.language as l, 
-COUNT(*) as count 
-FROM pull_requests, projects, commits, pull_request_history
-WHERE projects.id = pull_requests.base_repo_id AND pull_request.head_commit_id = commits.id AND pull_request_history.pull_request_id = pull_request.id
-GROUP BY (w,p,u,y,m,l) 
-ORDER BY count desc;
-
---pull_comment
-INSERT INTO facts 
-SELECT 'pull_comment' as w, 
-pull_requests.base_repo_id as p,
-pull_request_comments.user_id as u,
-EXTRACT(YEAR FROM pull_request_comments.created_at) as y, 
-EXTRACT(MONTH FROM pull_request_comments.created_at) as m, 
-projects.language as l, 
-COUNT(*) as count 
-FROM pull_request_comments, projects, pull_requests
-WHERE projects.id = pull_requests.base_repo_id AND pull_requests.id = pull_request_comments.pull_request_id
-GROUP BY (w,p,u,y,m,l) 
-ORDER BY count desc;
-
---forked
-INSERT INTO facts 
-SELECT 'forked' as w, 
-p2.forked_from as p,
-p2.owner_id as u,
-EXTRACT(YEAR FROM p2.created_at) as y, 
-EXTRACT(MONTH FROM p2.created_at) as m, 
-p2.language as l, 
-COUNT(*) as count 
-FROM projects as p1, projects as p2
-WHERE p1.id = p2.forked_from
-GROUP BY (w,p,u,y,m,l) 
-ORDER BY count desc;
-
---issue_reporter
-INSERT INTO facts 
-SELECT 'issue_reporter' as w, 
-issues.repo_id as p,
-issues.reporter_id as u,
-EXTRACT(YEAR FROM issues.created_at) as y, 
-EXTRACT(MONTH FROM issues.created_at) as m, 
-projects.language as l, 
-COUNT(*) as count 
-FROM issues, projects
-WHERE projects.id = issues.repo_id
-GROUP BY (w,p,u,y,m,l) 
-ORDER BY count desc;
-
---issue_assignee
-INSERT INTO facts 
-SELECT 'issue_assignee' as w, 
-issues.repo_id as p,
-issues.assignee_id as u,
-EXTRACT(YEAR FROM issues.created_at) as y, 
-EXTRACT(MONTH FROM issues.created_at) as m, 
-projects.language as l, 
-COUNT(*) as count 
-FROM issues, projects
-WHERE projects.id = issues.repo_id
-GROUP BY (w,p,u,y,m,l) 
-ORDER BY count desc;
-
---issue_comment
-INSERT INTO facts 
-SELECT 'issue_comment' as w, 
-issues.repo_id as p,
-issue_comments.user_id as u,
-EXTRACT(YEAR FROM issue_comments.created_at) as y, 
-EXTRACT(MONTH FROM issue_comments.created_at) as m, 
-projects.language as l, 
-COUNT(*) as count 
-FROM issues, projects, issue_comments
-WHERE projects.id = issues.repo_id AND issues.id = issue_comments.issue_id
-GROUP BY (w,p,u,y,m,l) 
-ORDER BY count desc;
-```
-
-We deleted unneeded data from imported source data, so we could save some disk space.
-
-```sql
-ALTER TABLE commits
-DROP COLUMN sha;
-
-ALTER TABLE commits
-DROP COLUMN committer_id;
-```
+[SQL queries for creating data warehouse model and inserting data](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/2_insert.sql)
 
 Statistics after creating dimensional model
 
 * Facts table contains ~772.000.000 records.
-* Projects - 1 mln records
-* Users - 1 mln records. 
 
 # 6. Project.
 
 ## 6.1. Quering data
 
-We start from counting how many projects are watched in total.
-```sql
-SELECT count(*) FROM (
-SELECT project_id, count(*) as sum FROM facts
-WHERE name LIKE '%watchers%'
-GROUP BY project_id
-ORDER BY sum desc) as x;
-```
-Answer: 4.234.456. 
+We want to know what makes project succeded. So we measure success on amount of watchers per project. We will query total amount of each type of fact for projects: 10 best, 1%, 4%, 7%, 10%, 13%, 16%, 19%, 22%, 25%, all. 
 
-| amount | count | 
-| --- | ---: |
+* [Quering data for projects](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/3_question1.sql)
+* [Quering more data for projects](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/4_question1adv.sql)
+
+## 6.2. Result of queries
+
+### Number of projects.
+| percentage | amount |
+| ---: | ---: |
 | 10 | 10 |
 | 1% | 42 345 |
 | 4% | 169 378 |
 | 7% | 296 412 |
-| 10% | 423 446 |
+| 10% | 423 446 |
 | 13% | 550 479 |
 | 16% | 677 513 |
 | 19% | 804 547 |
 | 22% | 931 580 |
 | 25% | 1 058 614 |
-| all | 4 234 456 |
+| 100% | 4 234 456 |
 
+### Amount of each fact for every amount of projects from table above. 
+[question1_facts_amount.csv]()
 
-We check best 10% of them.
-```sql
-CREATE TABLE watchersTenPer (
-	project_id int,
-	sum int
-);
+TABLE
 
-INSERT INTO watchersTenPer
-SELECT project_id, count(*) as sum FROM facts
-WHERE name LIKE '%watchers%'
-GROUP BY project_id
-ORDER BY sum desc
-LIMIT 423446; -- 423446 is 10% of 4234456
-```
+We put that data into Excel and calculate more data.
 
-We want to know how many facts there are for every kind of fact
-```sql
-CREATE TABLE FactsDiagram (
-	name char(20),
-	sum int
-);
+### Percentage amount of each fact to sum of all facts.
+[question1_facts_percentage.csv]()
 
-INSERT INTO FactsDiagram
-SELECT name, sum(amount) FROM facts GROUP BY name;
-```
+TABLE
 
-|         name         |    sum    |
-|----------------------|---------:|
-| forked               |  14664799 |
-| commit               | 502284865 |
-| pull_comment         |  10019022 |
-| commit_comment       |   3422105 |
-| pull                 |  39512989 |
-| issue_reporter       |  36672569 |
-| issue_assignee       |  36672569 |
-| watchers             |  54746722 |
-| issue_comment        |  62478002 |
+### Average of each fact per project.
+[question1_facts_amount_per_project.csv]()
 
+TABLE
 
-Firstly we created new tables and then we put answers there, but later we have rewriten queries, so You can skip block below. 
-```sql
---We create facts table for 10% of most watched projects
-CREATE TABLE factsOne (
-	name char(20),
-	project_id int,
-	user_id int,
-	year smallint,
-	month smallint,
-	language_id varchar,
-	amount int
-);
-
--- We count how many facts we got in total
-SELECT SUM(amount) FROM facts;
--- answer: 772 090 396
-
--- We count if we correctly created sql query to select only projects from 10% of most succesfull projects
-SELECT SUM(x.amount) FROM(
-SELECT f.name, f.project_id, f.user_id, f.year, f.month, f.language_id, f.amount FROM facts as f, watchersTenPer as w WHERE f.project_id = w.project_id) as x;
--- answer: 249 973 755
-
--- We insert results to our new table
-INSERT INTO factsOne
-SELECT f.name, f.project_id, f.user_id, f.year, f.month, f.language_id, f.amount FROM facts as f, watchersTenPer as w WHERE f.project_id = w.project_id;
-
--- We create table, so we can compare what makes project succesful
-CREATE TABLE FactsOneDiagram (
-	name char(20),
-	sum int
-);
-
--- We insert results
-INSERT INTO FactsOneDiagram
-SELECT name, sum(amount) FROM factsOne GROUP BY name;
-
---         name         |   sum    
-----------------------+----------
--- issue_reporter       | 18622891
--- commit               | 77957852
--- pull_comment         |  7025753
--- issue_comment        | 49618347
--- forked               | 10239012
--- commit_comment       |  1191045
--- pull                 | 18891960
--- issue_assignee       | 18622891
--- watchers             | 47804004
-
--- We do the same steps in order to calculate fact diagram for 1% of most watched projects
-CREATE TABLE watchersOnePer (
-	project_id int,
-	sum int
-);
-
-INSERT INTO watchersOnePer
-SELECT project_id, count(*) as sum FROM facts
-WHERE name LIKE '%watchers%'
-GROUP BY project_id
-ORDER BY sum desc
-LIMIT 42345;
-
-CREATE TABLE factsOnePer (
-	name char(20),
-	project_id int,
-	user_id int,
-	year smallint,
-	month smallint,
-	language_id varchar,
-	amount int
-);
-
-INSERT INTO factsOnePer
-SELECT f.name, f.project_id, f.user_id, f.year, f.month, f.language_id, f.amount FROM facts as f, watchersOnePer as w WHERE f.project_id = w.project_id;
-
-CREATE TABLE FactsOnePerDiagram (
-	name char(20),
-	sum int
-);
-INSERT INTO FactsOnePerDiagram
-SELECT name, sum(amount) FROM factsOnePer GROUP BY name;
-
---         name         |   sum    
-----------------------+----------
--- issue_reporter       |  9938161
--- commit               | 27729020
--- pull_comment         |  4326066
--- issue_comment        | 32008558
--- forked               |  6325383
--- commit_comment       |   590121
--- pull                 |  9933774
--- issue_assignee       |  9938161
--- watchers             | 34478828
-```
-
-Next results we will obtain by creating only one query for each results so we can save time.
-In order to better analyse the first question we check our database for number of facts for following % of most watched projects:
-first 10, 1%, 4%, 7%, 10%, 13%, 16%, 19%, 22%, 25%.
-
-
-10 best projects
-```sql
-SELECT f.name, sum(f.amount)
-FROM (SELECT project_id,  count(*) as sum FROM facts
-WHERE name LIKE '%watchers%'
-GROUP BY project_id
-ORDER BY sum desc
-LIMIT 10) as p,
-facts as f
-WHERE f.project_id = p.project_id
-GROUP BY f.name
-ORDER BY f.name; 
-
---         name         |  sum   
-----------------------+--------
--- commit               |  53955
--- commit_comment       |   3667
--- forked               | 114600
--- issue_assignee       |  70270
--- issue_comment        | 264317
--- issue_reporter       |  70270
--- pull                 |  65034
--- pull_comment         |  24276
--- watchers             | 493874
-
--- query time - 2:20
-```
-
-1% best projects 42345 of 4 234 456
-```sql
-SELECT f.name, sum(f.amount)
-FROM (SELECT project_id,  count(*) as sum FROM facts
-WHERE name LIKE '%watchers%'
-GROUP BY project_id
-ORDER BY sum desc
-LIMIT 42345) as p,
-facts as f
-WHERE f.project_id = p.project_id
-GROUP BY f.name
-ORDER BY f.name; 
-
-         name         |   sum    
-----------------------+----------
- commit               | 27729020
- commit_comment       |   590121
- forked               |  6325383
- issue_assignee       |  9938161
- issue_comment        | 32008558
- issue_reporter       |  9938161
- pull                 |  9933774
- pull_comment         |  4326066
- watchers             | 34478828
-
--- query time - 7:54
-```
-
-4% best projects 169 378 of 4 234 456
-```sql
-SELECT f.name, sum(f.amount)
-FROM (SELECT project_id,  count(*) as sum FROM facts
-WHERE name LIKE '%watchers%'
-GROUP BY project_id
-ORDER BY sum desc
-LIMIT 169378) as p,
-facts as f
-WHERE f.project_id = p.project_id
-GROUP BY f.name
-ORDER BY f.name; 
-
---         name         |   sum    
-----------------------+----------
--- commit               | 51460177
--- commit_comment       |   957976
--- forked               |  8787683
--- issue_assignee       | 14932963
--- issue_comment        | 43197602
--- issue_reporter       | 14932963
--- pull                 | 14982575
--- pull_comment         |  5969090
--- watchers             | 43528455
-
--- query time - 5:54
-```
-
-7% best projects 296 412 of 4 234 456
-```sql
- SELECT f.name, sum(f.amount)
- FROM (SELECT project_id,  count(*) as sum FROM facts
- WHERE name LIKE '%watchers%'
- GROUP BY project_id
- ORDER BY sum desc
- LIMIT 296412) as p,
- facts as f
- WHERE f.project_id = p.project_id
- GROUP BY f.name
- ORDER BY f.name; 
- 
---         name         |   sum    
-----------------------+----------
--- commit               | 66072697
--- commit_comment       |  1095203
--- forked               |  9699805
--- issue_assignee       | 17171782
--- issue_comment        | 47275516
--- issue_reporter       | 17171782
--- pull                 | 17305847
--- pull_comment         |  6642968
--- watchers             | 46305788
-
--- query time - 6:31
-```
-
-10% best projects 423 446 of 4 234 456
-```sql
- SELECT f.name, sum(f.amount)
- FROM (SELECT project_id,  count(*) as sum FROM facts
- WHERE name LIKE '%watchers%'
- GROUP BY project_id
- ORDER BY sum desc
- LIMIT 423446) as p,
- facts as f
- WHERE f.project_id = p.project_id
- GROUP BY f.name
- ORDER BY f.name; 
- 
-         name         |   sum    
-----------------------+----------
- commit               | 77957852
- commit_comment       |  1191045
- forked               | 10239012
- issue_assignee       | 18622891
- issue_comment        | 49618347
- issue_reporter       | 18622891
- pull                 | 18891960
- pull_comment         |  7025753
- watchers             | 47804004
-
--- query time - 6:50
-```
-
-13% best projects 550 479 of 4 234 456
-```sql
-SELECT f.name, sum(f.amount)
-FROM (SELECT project_id,  count(*) as sum FROM facts
-WHERE name LIKE '%watchers%'
-GROUP BY project_id
-ORDER BY sum desc
-LIMIT 550479) as p,
-facts as f
-WHERE f.project_id = p.project_id
-GROUP BY f.name
-ORDER BY f.name; 
-
---         name         |   sum    
-------------------------+----------
--- commit               | 89195302
--- commit_comment       |  1286233
--- forked               | 10611321
--- issue_assignee       | 19682637
--- issue_comment        | 51140685
--- issue_reporter       | 19682637
--- pull                 | 20029839
--- pull_comment         |  7314754
--- watchers             | 48789740
-
--- query time - 6:24 
-```
-
-16% best projects 677 513 of 4 234 456
-```sql
-SELECT f.name, sum(f.amount)
-FROM (SELECT project_id,  count(*) as sum FROM facts
-WHERE name LIKE '%watchers%'
-GROUP BY project_id
-ORDER BY sum desc
-LIMIT 677513) as p,
-facts as f
-WHERE f.project_id = p.project_id
-GROUP BY f.name
-ORDER BY f.name; 
---         name         |   sum    
-------------------------+----------
--- commit               | 98016297
--- commit_comment       |  1347155
--- forked               | 10888426
--- issue_assignee       | 20620420
--- issue_comment        | 52204942
--- issue_reporter       | 20620420
--- pull                 | 20921751
--- pull_comment         |  7570391
--- watchers             | 49494892
-
--- query time - 6:19
-```
-
-19% best projects 804547 of 4 234 456
-```sql
-SELECT f.name, sum(f.amount)
-FROM (SELECT project_id,  count(*) as sum FROM facts
-WHERE name LIKE '%watchers%'
-GROUP BY project_id
-ORDER BY sum desc
-LIMIT 804547) as p,
-facts as f
-WHERE f.project_id = p.project_id
-GROUP BY f.name
-ORDER BY f.name;
-
---         name         |    sum    
-------------------------+-----------
--- commit               | 106707997
--- commit_comment       |   1403791
--- forked               |  11103236
--- issue_assignee       |  21299929
--- issue_comment        |  53042170
--- issue_reporter       |  21299929
--- pull                 |  21669761
--- pull_comment         |   7741251
--- watchers             |  50044933
-
--- query time - 6:39
-```
-
-22% best projects 931 580 of 4 234 456
-```sql
-SELECT f.name, sum(f.amount)
-FROM (SELECT project_id,  count(*) as sum FROM facts
-WHERE name LIKE '%watchers%'
-GROUP BY project_id
-ORDER BY sum desc
-LIMIT 931580) as p,
-facts as f
-WHERE f.project_id = p.project_id
-GROUP BY f.name
-ORDER BY f.name;
-
---         name         |    sum    
-------------------------+-----------
--- commit               | 114044246
--- commit_comment       |   1450684
--- forked               |  11273477
--- issue_assignee       |  21861461
--- issue_comment        |  53661676
--- issue_reporter       |  21861461
--- pull                 |  22272249
--- pull_comment         |   7872238
--- watchers             |  50490747
-
--- query time 6:11
-```
-
-25% best projects 1 058 614 of 4 234 456
-```sql
-SELECT f.name, sum(f.amount)
-FROM (SELECT project_id,  count(*) as sum FROM facts
-WHERE name LIKE '%watchers%'
-GROUP BY project_id
-ORDER BY sum desc
-LIMIT 1058614) as p,
-facts as f
-WHERE f.project_id = p.project_id
-GROUP BY f.name
-ORDER BY f.name;
-
---         name         |    sum    
-------------------------+-----------
--- commit               | 120637829
--- commit_comment       |   1509909
--- forked               |  11423644
--- issue_assignee       |  22376132
--- issue_comment        |  54195492
--- issue_reporter       |  22376132
--- pull                 |  22854817
--- pull_comment         |   7989733
--- watchers             |  50871849
-
--- time 6:20
-```
-
-Fact *watchers* is actually useless for anylysis since we base our best project on amount of watchers fact per project. 
-
-## 8.2. Analysing data. 
-
+## 6.3. Data analysis 
 
 
 
 
 # 7. Users
 
-We want to know what makes user succeded? We measure success on number of user followers. We want to study chages in amount of type of facts and their percentage for best users: 10 users, 1%, 4%, 7%, 10%, 13%, 16%, 19%, 22%, 25%. 
-
 ## 7.1. Quering data
 
-```sql
-CREATE TABLE followersTenPer (
-	user_id int,
-	sum int
-);
+We want to know what makes user succeded? We measure success on amount of followers per user. We will only users which have at least 1 follower. We will query total amount of each type of fact for users: 10 best, 1%, 4%, 7%, 10%, 13%, 16%, 19%, 22%, 25%, all.
 
--- We check number of users that are followed
-SELECT count(*) FROM(
-SELECT user_id, sum(amount) as sum FROM facts
-WHERE name LIKE '%follower%'
-GROUP BY user_id
-ORDER BY sum desc) as x;
--- answer: 1790539
+* [Quering data for users](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/5_question2.sql)
+* [Quering more data for users](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/6_question2adv.sql)
 
--- We insert 10% of most followed users facts into table followersTenPer
-INSERT INTO followersTenPer
-SELECT user_id, sum(amount) as sum FROM facts
-WHERE name LIKE '%follower%'
-GROUP BY user_id
-ORDER BY sum desc
-LIMIT 179053;
+## 7.2. Result of queries
 
--- We calculate how many types of facts there are in facts table
-SELECT name, sum(amount) FROM facts GROUP BY name;
+Number of users.
 
---         name         |    sum    
-----------------------+-----------
--- forked               |  14664799
--- commit               | 502284865
--- pull_comment         |  10019022
--- commit_comment       |   3422105
--- pull                 |  39512989
--- issue_reporter       |  36672569
--- issue_assignee       |  36672569
--- follower             |  11616754
--- issue_comment        |  62478002
+| percentage | amount |
+| ---: | ---: |
+| 10 | 10 |
+| 1% | 17 905 |
+| 4% | 71622 |
+| 7% | 125338 |
+| 10% | 179053 |
+| 13% | 232770 |
+| 16% | 286486 |
+| 19% | 340202 |
+| 22% | 393919 |
+| 25% | 447635 |
+| 100% | 1790539 |
 
---We create facts table for 10% of most followed users
-CREATE TABLE factsTwo (
-	name char(20),
-	project_id int,
-	user_id int,
-	year smallint,
-	month smallint,
-	language_id varchar,
-	amount int
-);
-
---We insert results to our new table
-INSERT INTO factsTwo
-SELECT f.name, f.project_id, f.user_id, f.year, f.month, f.language_id, f.amount FROM facts as f, followersTenPer as w WHERE f.user_id = w.user_id;
-
--- We create table so, we can compare what makes project succesful
-CREATE TABLE FactsTwoDiagram (
-	name char(20),
-	sum int
-);
-
--- We insert values
-INSERT INTO FactsTwoDiagram
-SELECT name, sum(amount) FROM factsTwo GROUP BY name;
-
---         name         |    sum    
-------------------------+-----------
--- issue_reporter       |   7583513
--- commit               | 146159676
--- pull_comment         |   6229458
--- issue_comment        |  34290293
--- follower             |   7896039
--- forked               |   3253914
--- commit_comment       |   1696279
--- pull                 |  15103606
--- issue_assignee       |   1168304
+## 7.2. Analysing the data
 
 
--- We do the same steps for 1% of most followed users
 
-CREATE TABLE followersOnePer (
-	user_id int,
-	sum int
-);
+# 8. Languages
 
-INSERT INTO followersOnePer
-SELECT user_id, sum(amount) as sum FROM facts
-WHERE name LIKE '%follower%'
-GROUP BY user_id
-ORDER BY sum desc
-LIMIT 17905;
+# 8.1. Quering data
 
-CREATE TABLE factsTwoPer (
-	name char(20),
-	project_id int,
-	user_id int,
-	year smallint,
-	month smallint,
-	language_id varchar,
-	amount int
-);
-
-INSERT INTO factsTwoPer
-SELECT f.name, f.project_id, f.user_id, f.year, f.month, f.language_id, f.amount FROM facts as f, followersOnePer as w WHERE f.user_id = w.user_id;
-
-CREATE TABLE FactsTwoPerDiagram (
-	name char(20),
-	sum int
-);
-
-INSERT INTO FactsTwoPerDiagram
-SELECT name, sum(amount) FROM factsTwoPer GROUP BY name;
-
---         name         |   sum    
-----------------------+----------
--- issue_reporter       |  2186028
--- commit               | 39492783
--- pull_comment         |  2154402
--- issue_comment        | 14025246
--- follower             |  4378478
--- forked               |   642165
--- commit_comment       |   566646
--- pull                 |  4129509
--- issue_assignee       |   322552
--- watchers             |  4700116
-```
-
-Next results we will obtain by creating only one query for each results so we can save time. In order to better analyse the second question we check our database for number of facts for following % of most followed users
-* all - 1790539 - 1% - 17905,39
-* 10
-* 4%
-* 7%
-* 13%
-* 16%
-* 19%
-* 22%
-* 25%
-
-```sql
--- 10 most followed users
-SELECT f.name, sum(f.amount)
-FROM (SELECT user_id, sum(amount) as sum FROM facts
-WHERE name LIKE '%follower%'
-GROUP BY user_id
-ORDER BY sum desc
-LIMIT 10) as p,
-facts as f
-WHERE f.user_id = p.user_id
-GROUP BY f.name
-ORDER BY f.name; 
-
---         name         |  sum   
-------------------------+--------
--- commit               | 107941
--- commit_comment       |   1435
--- follower             | 197011
--- forked               |    692
--- issue_assignee       |    427
--- issue_comment        |  40724
--- issue_reporter       |   4235
--- pull                 |  10250
--- pull_comment         |   6446
--- watchers             |   2291
-
--- time - 1:32
-
--- 4% of most followed users - 71622 of 1790539
-SELECT f.name, sum(f.amount)
-FROM (SELECT user_id, sum(amount) as sum FROM facts
-WHERE name LIKE '%follower%'
-GROUP BY user_id
-ORDER BY sum desc
-LIMIT 71622) as p,
-facts as f
-WHERE f.user_id = p.user_id
-GROUP BY f.name
-ORDER BY f.name; 
-
---         name         |   sum    
-------------------------+----------
--- commit               | 93369401
--- commit_comment       |  1217832
--- follower             |  6314126
--- forked               |  1816848
--- issue_assignee       |   729335
--- issue_comment        | 25921331
--- issue_reporter       |  4764984
--- pull                 |  9549031
--- pull_comment         |  4554476
--- watchers             | 12859749
- 
--- time 6:18
- 
--- 7% of most followed users - 125338 of 1790539
-SELECT f.name, sum(f.amount)
-FROM (SELECT user_id, sum(amount) as sum FROM facts
-WHERE name LIKE '%follower%'
-GROUP BY user_id
-ORDER BY sum desc
-LIMIT 125338) as p,
-facts as f
-WHERE f.user_id = p.user_id
-GROUP BY f.name
-ORDER BY f.name; 
-
---         name         |    sum    
-------------------------+-----------
--- commit               | 122873709
--- commit_comment       |   1500960
--- follower             |   7263298
--- forked               |   2605050
--- issue_assignee       |    973001
--- issue_comment        |  30896614
--- issue_reporter       |   6512953
--- pull                 |  12945700
--- pull_comment         |   5460781
--- watchers             |  18185338
-
--- time 6:00
-
--- 13% of most followed users - 232770 of 1790539
-SELECT f.name, sum(f.amount)
-FROM (SELECT user_id, sum(amount) as sum FROM facts
-WHERE name LIKE '%follower%'
-GROUP BY user_id
-ORDER BY sum desc
-LIMIT 232770) as p,
-facts as f
-WHERE f.user_id = p.user_id
-GROUP BY f.name
-ORDER BY f.name; 
-
---         name         |    sum    
-------------------------+-----------
--- commit               | 164005529
--- commit_comment       |   1845159
--- follower             |   8368352
--- forked               |   3778149
--- issue_assignee       |   1320443
--- issue_comment        |  36921662
--- issue_reporter       |   8408844
--- pull                 |  16781906
--- pull_comment         |   6688960
--- watchers             |  25612235
- 
- -- time - 6:24
-
--- 16% of most followed users - 286486 of 1790539
-SELECT f.name, sum(f.amount)
-FROM (SELECT user_id, sum(amount) as sum FROM facts
-WHERE name LIKE '%follower%'
-GROUP BY user_id
-ORDER BY sum desc
-LIMIT 286486) as p,
-facts as f
-WHERE f.user_id = p.user_id
-GROUP BY f.name
-ORDER BY f.name; 
-
---         name         |    sum    
-------------------------+-----------
--- commit               | 178152668
--- commit_comment       |   1959978
--- follower             |   8741205
--- forked               |   4220847
--- issue_assignee       |   1435992
--- issue_comment        |  38848046
--- issue_reporter       |   9068302
--- pull                 |  18079758
--- pull_comment         |   7043038
--- watchers             |  28243021
- 
--- 6:12
-
--- 19% of most followed users - 340202 of 1790539
-SELECT f.name, sum(f.amount)
-FROM (SELECT user_id, sum(amount) as sum FROM facts
-WHERE name LIKE '%follower%'
-GROUP BY user_id
-ORDER BY sum desc
-LIMIT 340202) as p,
-facts as f
-WHERE f.user_id = p.user_id
-GROUP BY f.name
-ORDER BY f.name; 
-
---         name         |    sum    
-------------------------+-----------
--- commit               | 189670954
--- commit_comment       |   2043777
--- follower             |   9047495
--- forked               |   4601049
--- issue_assignee       |   1533378
--- issue_comment        |  40364374
--- issue_reporter       |   9588583
--- pull                 |  19098225
--- pull_comment         |   7297286
--- watchers             |  30406631
-
--- time - 6:53
-
--- 22% of most followed users - 393919 of 1790539
-SELECT f.name, sum(f.amount)
-FROM (SELECT user_id, sum(amount) as sum FROM facts
-WHERE name LIKE '%follower%'
-GROUP BY user_id
-ORDER BY sum desc
-LIMIT 393919) as p,
-facts as f
-WHERE f.user_id = p.user_id
-GROUP BY f.name
-ORDER BY f.name; 
-
---         name         |    sum    
-------------------------+-----------
--- commit               | 199883665
--- commit_comment       |   2119784
--- follower             |   9312934
--- forked               |   4940084
--- issue_assignee       |   1609048
--- issue_comment        |  41698444
--- issue_reporter       |  10037342
--- pull                 |  19997862
--- pull_comment         |   7523420
--- watchers             |  32229631
- 
- -- time - 6:36
-
--- 25% of most followed users - 447635 of 1790539
-SELECT f.name, sum(f.amount)
-FROM (SELECT user_id, sum(amount) as sum FROM facts
-WHERE name LIKE '%follower%'
-GROUP BY user_id
-ORDER BY sum desc
-LIMIT 447635) as p,
-facts as f
-WHERE f.user_id = p.user_id
-GROUP BY f.name
-ORDER BY f.name; 
-
---         name         |    sum    
-------------------------+-----------
--- commit               | 208690036
--- commit_comment       |   2183772
--- follower             |   9527798
--- forked               |   5229716
--- issue_assignee       |   1678672
--- issue_comment        |  42921851
--- issue_reporter       |  10440287
--- pull                 |  20755030
--- pull_comment         |   7706993
--- watchers             |  33656761
- 
- -- time - 5:21
-```
-
-# 8. Quering languages data
+# 8.2. 
 
 Which languages are growing up and with are falling down?
 
