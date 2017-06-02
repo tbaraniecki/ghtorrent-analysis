@@ -436,7 +436,30 @@ copy (SELECT * FROM question3) TO '/Users/tomek/code/dw/question3.csv' WITH CSV 
 ### For every programming language, every fact for each month between 09-2013 and 09-2016. 
 [Results](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question_3_results-advanced.csv)
 
+By mistake we included followers to our query. We decided to use inverse grep to get rid of rows with "follower".
+```bash
+grep -v "follower" question_3_results-advanced.csv > question3_results-changed-without-follower.csv
+```
+
 ## 8.3. Analysing the data
+
+We will take into consideration all facts. We count average monthly amount of each fact for range 09-2013 and 09-2016 and then check if average of each fact from 07-2016, 08-2016, 09-2016 is bigger. We take into consideration 10 facts, so if at least 5 of them qualifies, we assume that programming language is evolving. 
+
+[Result of calculation in Excel](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question3_results_final.csv)
+
+```bash
+grep "up" question3_short.csv > question3_results_up.csv
+```
+
+[List of programming languages on GitHub which are rising](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question3_results_up.csv)
+
+```bash
+grep "down" question3_short.csv > question3_results_down.csv
+```
+
+[List of programming languages on GitHub which are not going to survive](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question3_results_down.csv)
+
+
 
 
 
