@@ -365,10 +365,12 @@ copy (SELECT * FROM question3) TO '/Users/tomek/code/dw/question3.csv' WITH CSV 
 ## 8.2. Result of query
 
 ### All facts sum up for every language for each month between 09-2013 and 09-2016. 
-Due to size of table please use following [link](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question_3_results-simple.csv).
+[Results](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question_3_results-simple.csv)
 
 ### For every programming language, every fact for each month between 09-2013 and 09-2016. 
-Due to size of table please use following[link](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question_3_results-advanced.csv).
+[Results](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question_3_results-advanced.csv)
 
 ## 8.3. Analysing the data
+
+
 
