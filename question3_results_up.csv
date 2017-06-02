@@ -41,14 +41,6 @@ GDScript
 GLSL
 Genshi
 Gnuplot
-Gnuplot,
-Gnuplot,
-Gnuplot,
-Gnuplot,
-Gnuplot,
-Gnuplot,
-Gnuplot,
-Gnuplot,
 Go
 Golo
 Gosu
@@ -62,29 +54,13 @@ Haskell
 IDL
 Idris
 Inform 7
-Inno Setup,down
-Inno Setup,
-Inno Setup,
-Inno Setup,
-Inno Setup,
-Inno Setup,
-Inno Setup,
-Inno Setup,
-Inno Setup,
+Inno Setup
 Isabelle
 Jasmin
 Java
 JavaScript
 Julia
 Jupyter Notebook
-Jupyter Notebook,
-Jupyter Notebook,
-Jupyter Notebook,
-Jupyter Notebook,
-Jupyter Notebook,
-Jupyter Notebook,
-Jupyter Notebook,
-Jupyter Notebook,
 KiCad
 Kit
 Kotlin
@@ -119,14 +95,7 @@ PostScript
 PowerShell
 Protocol Buffer
 Puppet,down
-Puppet,
-Puppet,
-Puppet,
-Puppet,
-Puppet,
-Puppet,
-Puppet,
-Puppet,
+Puppet
 PureBasic
 PureScript
 Python
@@ -148,15 +117,7 @@ Smali
 Smarty
 SourcePawn
 Squirrel
-SuperCollider,down
-SuperCollider,
-SuperCollider,
-SuperCollider,
-SuperCollider,
-SuperCollider,
-SuperCollider,
-SuperCollider,
-SuperCollider,
+SuperCollider
 Swift
 SystemVerilog
 Tcl
@@ -177,12 +138,3 @@ XQuery
 XS
 XSLT
 Xtend
-mupad,down
-mupad,
-mupad,
-mupad,
-mupad,
-mupad,
-mupad,
-mupad,
-mupad,
