@@ -259,8 +259,23 @@ We put that data into Excel and calculate more data.
 
 ## 6.3. Data analysis 
 
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_distribution.png "Percentage distribution of facts concerning the project")
 
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_commit.png "Amout of commits per project")
 
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_commit_comment.png "Average amout of commit_comment per project")
+
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_forked.png "Average amout of forks per project")
+
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_issue_assignee.png "Average amout of issue_assignee per project")
+
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_issue_comment.png "Average amout of issue comment per project")
+
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_issue_reporter.png "Average amout of issue reporter per project")
+
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_pull.png "Average amout of pull per project")
+
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_pull_comment.png "Average amout of pull_comment per project")
 
 # 7. Users
 
@@ -339,6 +354,7 @@ We put that data into Excel and calculate more data.
 
 ## 7.3. Analysing the data
 
+![alt text]( "Average amout of  per project")
 
 # 8. Languages
 
