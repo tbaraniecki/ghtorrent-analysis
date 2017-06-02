@@ -340,8 +340,6 @@ We put that data into Excel and calculate more data.
 ## 7.3. Analysing the data
 
 
-
-
 # 8. Languages
 
 ## 8.1. Quering data
@@ -351,14 +349,13 @@ We want data in range 09.2013 - 09.2016.
 ### Simple query
 
 We sum up facts for every language. 
-
-[link](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question_3_results-simple.csv)
+[Query for simple query languages](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/7_question3.sql)
 
 ### Advanced query
 
 We want to get information about every fact for each language. 
 
-[link](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question_3_results-advanced.csv)
+[Query for advanced query for languages](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/8_question3adv.sql)
 
 We exported result of query from table *question3*.
 ```sql
@@ -368,8 +365,10 @@ copy (SELECT * FROM question3) TO '/Users/tomek/code/dw/question3.csv' WITH CSV 
 ## 8.2. Result of query
 
 ### All facts sum up for every language for each month between 09-2013 and 09-2016. 
-
-
+Due to size of table please use following [link](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question_3_results-simple.csv).
 
 ### For every programming language, every fact for each month between 09-2013 and 09-2016. 
+Due to size of table please use following[link](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question_3_results-advanced.csv).
+
+## 8.3. Analysing the data
 
