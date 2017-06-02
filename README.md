@@ -261,7 +261,9 @@ We put that data into Excel and calculate more data.
 
 ![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_distribution.png "Percentage distribution of facts concerning the project")
 
-![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_commit.png "Amout of commits per project")
+As we can see on chart above for all projects commits takes to 72% facts. When narrow our data to 25% of best projects we see that commits are no longer responsible for 3/4 of facts. We can see that for 1% best project dominant fact is issue_comment. 
+
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_commit.png "Average amount of commits per project")
 
 ![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_commit_comment.png "Average amout of commit_comment per project")
 
@@ -276,6 +278,20 @@ We put that data into Excel and calculate more data.
 ![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_pull.png "Average amout of pull per project")
 
 ![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_chart_pull_comment.png "Average amout of pull_comment per project")
+
+As we can see in our results amount of issue_assignee and issue_reporter is the same - this is no error. For every issue there can only be one reporter (user who created the issue) and one assigned user. So we can conclude that amount of issue_assignee is equal to amout of issues.  
+
+## 6.4. Conlusion of successfull project
+
+We can easly say that whem your project reaches As we can see from charts above, 1% of best projects of GitHub, which we can call success have different distribution of type of facts per project than all of projects on GitHub. There is almost the same amount of commits as comments for issues. 
+
+Based on data we have all successfull project have in common following:
+- better than 1/8 ratio fork / commit.
+- at least 3 comments per issue
+- 9% of facts concerning project is about merging new features to master branch.
+- in project adding new code is responsible for only up to 33% of facts.
+
+Success of the project is not from good new code, but mostly from collaboration between users and feedback from the ones who are actively using it.
 
 # 7. Users
 
