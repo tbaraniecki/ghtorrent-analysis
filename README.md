@@ -231,12 +231,31 @@ We put that data into Excel and calculate more data.
 ### Percentage amount of each fact to sum of all facts.
 [question1_facts_percentage.csv](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_facts_amount_per_project.csv)
 
-TABLE
+| |100%|25%|22%|19%|16%|13%|10%|7%|4%|1%|10 best|
+|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+|commit|72.20%|45.81%|44.85%|43.68%|42.21%|40.74%|38.56%|36.22%|33.15%|27.51%|8.10%|
+|commit_comment|0.49%|0.57%|0.57%|0.57%|0.58%|0.59%|0.59%|0.60%|0.62%|0.59%|0.55%|
+|forked|2.11%|4.34%|4.43%|4.55%|4.69%|4.85%|5.06%|5.32%|5.66%|6.28%|17.20%|
+|issue_assignee|5.27%|8.50%|8.60%|8.72%|8.88%|8.99%|9.21%|9.41%|9.62%|9.86%|10.54%|
+|issue_comment|8.98%|20.58%|21.10%|21.71%|22.48%|23.36%|24.54%|25.91%|27.83%|31.76%|39.66%|
+|issue_reporter|5.27%|8.50%|8.60%|8.72%|8.88%|8.99%|9.21%|9.41%|9.62%|9.86%|10.54%|
+|pull|5.68%|8.68%|8.76%|8.87%|9.01%|9.15%|9.34%|9.49%|9.65%|9.86%|9.76%|
+|pull_comment|1.44%|3.03%|3.10%|3.17%|3.26%|3.34%|3.48%|3.64%|3.85%|4.29%|3.64%|
 
 ### Average of each fact per project.
 [question1_facts_amount_per_project.csv](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_facts_percentage.csv)
 
-TABLE
+| |100%|25%|22%|19%|16%|13%|10%|7%|4%|1%|10 best|
+|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+|commit|119|114|122|133|145|162|184|223|304|655|5396|
+|commit_comment|1|1|2|2|2|2|3|4|6|14|367|
+|forked|3|11|12|14|16|19|24|33|52|149|11460|
+|issue_assignee|9|21|23|26|30|36|44|58|88|235|7027|
+|issue_comment|15|51|58|66|77|93|117|159|255|756|26432|
+|issue_reporter|9|21|23|26|30|36|44|58|88|235|7027|
+|pull|9|22|24|27|31|36|45|58|88|235|6503|
+|pull_comment|2|8|8|10|11|13|17|22|35|102|2428|
+|sum|164|249|273|304|343|398|477|615|916|2380|66639|
 
 ## 6.3. Data analysis 
 
@@ -254,7 +273,7 @@ We want to know what makes user succeded? We measure success on amount of follow
 
 ## 7.2. Result of queries
 
-Number of users.
+### Number of users.
 
 | percentage | amount |
 | ---: | ---: |
@@ -270,261 +289,87 @@ Number of users.
 | 25% | 447635 |
 | 100% | 1790539 |
 
-## 7.2. Analysing the data
+### Amount of each fact for every amount of users from table above
+[question2_facts_amount.csv]()
+
+||100%|25%|22%|19%|16%|13%|10%|7%|4%|1%|10 best|
+|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+|commit|502284865|208690036|199883665|189670954|178152668|164005529|146159676|122873709|93369401|39492783|107941|
+|commit_comment|3422105|2183772|2119784|2043777|1959978|1845159|1696279|1500960|1217832|566646|1435|
+|forked|14664799|5229716|4940084|4601049|4220847|3778149|3253914|2605050|1816848|642165|692|
+|issue_assignee|36672569|1678672|1609048|1533378|1435992|1320443|1168304|973001|729335|322552|427|
+|issue_comment|62478002|42921851|41698444|40364374|38848046|36921662|34290293|30896614|25921331|14025246|40724|
+|issue_reporter|36672569|10440287|10037342|9588583|9068302|8408844|7583513|6512953|4764984|2186028|4235|
+|pull|39512989|20755030|19997862|19098225|18079758|16781906|15103606|12945700|9549031|4129509|10250|
+|pull_comment|10019022|7706993|7523420|7297286|7043038|6688960|6229458|5460781|4554476|2154402|6446|
+|sum|705726920|299606357|287809649|274197626|258808629|239750652|215485043|183768768|141923238|63519331|172150|
+
+We put that data into Excel and calculate more data.
+
+### Percentage amount of each fact to sum of all facts.
+[question2_facts_percentage.csv]()
+
+||100%|25%|22%|19%|16%|13%|10%|7%|4%|1%|10 best|
+|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+|commit|71.17%|69.65%|69.45%|69.17%|68.84%|68.41%|67.83%|66.86%|65.79%|62.17%|62.70%|
+|commit_comment|0.48%|0.73%|0.74%|0.75%|0.76%|0.77%|0.79%|0.82%|0.86%|0.89%|0.83%|
+|forked|2.08%|1.75%|1.72%|1.68%|1.63%|1.58%|1.51%|1.42%|1.28%|1.01%|0.40%|
+|issue_assignee|5.20%|0.56%|0.56%|0.56%|0.55%|0.55%|0.54%|0.53%|0.51%|0.51%|0.25%|
+|issue_comment|8.85%|14.33%|14.49%|14.72%|15.01%|15.40%|15.91%|16.81%|18.26%|22.08%|23.66%|
+|issue_reporter|5.20%|3.48%|3.49%|3.50%|3.50%|3.51%|3.52%|3.54%|3.36%|3.44%|2.46%|
+|pull|5.60%|6.93%|6.95%|6.97%|6.99%|7.00%|7.01%|7.04%|6.73%|6.50%|5.95%|
+|pull_comment|1.42%|2.57%|2.61%|2.66%|2.72%|2.79%|2.89%|2.97%|3.21%|3.39%|3.74%|
+|sum|100%|100%|100%|100%|100%|100%|100%|100%|100%|100%|100%|
+
+### Average of each fact per user.
+[question2_facts_amount_per_user.csv]()
+
+||100%|25%|22%|19%|16%|13%|10%|7%|4%|1%|10 best|
+|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+|commit|281|466|507|558|622|705|816|980|1304|2206|10794|
+|commit_comment|2|5|5|6|7|8|9|12|17|32|144|
+|forked|8|12|13|14|15|16|18|21|25|36|69|
+|issue_assignee|20|4|4|5|5|6|7|8|10|18|43|
+|issue_comment|35|96|106|119|136|159|192|247|362|783|4072|
+|issue_reporter|20|23|25|28|32|36|42|52|67|122|424|
+|pull|22|46|51|56|63|72|84|103|133|231|1025|
+|pull_comment|6|17|19|21|25|29|35|44|64|120|645|
+|sum|394|669|731|806|903|1030|1203|1466|1982|3548|17215|
+
+
+## 7.3. Analysing the data
+
 
 
 
 # 8. Languages
 
-# 8.1. Quering data
+## 8.1. Quering data
 
-# 8.2. 
+We want data in range 09.2013 - 09.2016.
 
-Which languages are growing up and with are falling down?
+### Simple query
 
+We sum up facts for every language. 
 
-## 8.2. Simple query
+[link](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question_3_results-simple.csv)
 
-In order to answer this question we will do simple query that will provide us with results we want in date range: 09.2013 - 09.2016
+### Advanced query
 
-```sql
-SELECT 
-l.language as language,
-a.sum as "2013-09",
-b.sum as "2013-10",
-c.sum as "2013-11",
-d.sum as "2013-12",
-aa.sum as "2014-01",
-ab.sum as "2014-02",
-ac.sum as "2014-03",
-ad.sum as "2014-04",
-ae.sum as "2014-05",
-af.sum as "2014-06",
-ag.sum as "2014-07",
-ah.sum as "2014-08",
-ai.sum as "2014-09",
-aj.sum as "2014-10",
-ak.sum as "2014-11",
-al.sum as "2014-12",
-ba.sum as "2015-01",
-bb.sum as "2015-02",
-bc.sum as "2015-03",
-bd.sum as "2015-04",
-be.sum as "2015-05",
-bf.sum as "2015-06",
-bg.sum as "2015-07",
-bh.sum as "2015-08",
-bi.sum as "2015-09",
-bj.sum as "2015-10",
-bk.sum as "2015-11",
-bl.sum as "2015-12",
-ca.sum as "2016-01",
-cb.sum as "2016-02",
-cc.sum as "2016-03",
-cd.sum as "2016-04",
-ce.sum as "2016-05",
-cf.sum as "2016-06",
-cg.sum as "2016-07",
-ch.sum as "2016-08",
-ci.sum as "2016-09"
-FROM language_dimension as l,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2013 AND month=9 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as a,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2013 AND month=10 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as b,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2013 AND month=1 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as c,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2013 AND month=12 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as d,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2014 AND month=1 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as aa,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2014 AND month=2 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as ab,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2014 AND month=3 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as ac,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2014 AND month=4 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as ad,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2014 AND month=5 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as ae,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2014 AND month=6 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as af,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2014 AND month=7 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as ag,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2014 AND month=8 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as ah,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2014 AND month=9 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as ai,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2014 AND month=10 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as aj,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2014 AND month=11 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as ak,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2014 AND month=12 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as al,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2015 AND month=1 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as ba,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2015 AND month=2 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as bb,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2015 AND month=3 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as bc,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2015 AND month=4 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as bd,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2015 AND month=5 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as be,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2015 AND month=6 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as bf,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2015 AND month=7 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as bg,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2015 AND month=8 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as bh,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2015 AND month=9 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as bi,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2015 AND month=10 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as bj,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2015 AND month=11 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as bk,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2015 AND month=12 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as bl,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2016 AND month=1 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as ca,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2016 AND month=2 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as cb,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2016 AND month=3 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as cc,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2016 AND month=4 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as cd,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2016 AND month=5 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as ce,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2016 AND month=6 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as cf,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2016 AND month=7 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as cg,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2016 AND month=8 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as ch,
-(SELECT l, SUM(sum) as sum FROM(SELECT language_id as l, SUM(amount) as sum FROM facts WHERE year=2016 AND month=9 GROUP BY language_id UNION SELECT language, 0 FROM language_dimension) as x GROUP BY l ORDER BY sum desc) as ci
-WHERE a.l = l.language AND b.l = l.language AND c.l = l.language AND d.l = l.language AND aa.l = l.language AND ab.l = l.language AND ac.l = l.language AND ad.l = l.language AND ae.l = l.language AND af.l = l.language AND ag.l = l.language AND ah.l = l.language AND ai.l = l.language AND aj.l = l.language AND ak.l = l.language AND al.l = l.language AND ba.l = l.language AND bb.l = l.language AND bc.l = l.language AND bd.l = l.language AND be.l = l.language AND bf.l = l.language AND bg.l = l.language AND bh.l = l.language AND bi.l = l.language AND bj.l = l.language AND bk.l = l.language AND bl.l = l.language AND ca.l = l.language AND cb.l = l.language AND cc.l = l.language AND cd.l = l.language AND ce.l = l.language AND cf.l = l.language AND cg.l = l.language AND ch.l = l.language AND ci.l = l.language 
-ORDER BY a.sum desc;
-```
+We want to get information about every fact for each language. 
 
-## 8.2. Languages - more advanced answear
-We want to see if our main query is correct by checking this.
-
-```sql
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2013 AND month=9 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as a,
-```
-
-We want to see if our main query is correct by checking this:
-```sql
-SELECT l.language, f.name as fact_name, 0 
-FROM language_dimension as l, fact_names as f
-ORDER BY (l.language, f.name);
-```
-
-We create table of fact names so we can easly access it in main query and export it to csv.
-
-```sql
-CREATE TABLE fact_names(
-	name char(20)
-)
-
-INSERT INTO fact_names
-SELECT name FROM facts GROUP BY name ORDER BY name asc; 
-
-CREATE TABLE question3(
-	language varchar,
-	fact_name char(20),
-	"2013-09" int,
-	"2013-10" int,
-	"2013-11" int,
-	"2013-12" int,
-	"2014-01" int,
-	"2014-02" int,
-	"2014-03" int,
-	"2014-04" int,
-	"2014-05" int,
-	"2014-06" int,
-	"2014-07" int,
-	"2014-08" int,
-	"2014-09" int,
-	"2014-10" int,
-	"2014-11" int,
-	"2014-12" int,
-	"2015-01" int,
-	"2015-02" int,
-	"2015-03" int,
-	"2015-04" int,
-	"2015-05" int,
-	"2015-06" int,
-	"2015-07" int,
-	"2015-08" int,
-	"2015-09" int,
-	"2015-10" int,
-	"2015-11" int,
-	"2015-12" int,
-	"2016-01" int,
-	"2016-02" int,
-	"2016-03" int,
-	"2016-04" int,
-	"2016-05" int,
-	"2016-06" int,
-	"2016-07" int,
-	"2016-08" int,
-	"2016-09" int
-)
-```
-
-1.2013 - 09.2016
-```sql
-INSERT INTO question3
-SELECT 
-l.language as language,
-f.name as fact_name,
-a.sum as "2013-09",
-b.sum as "2013-10",
-c.sum as "2013-11",
-d.sum as "2013-12",
-aa.sum as "2014-01",
-ab.sum as "2014-02",
-ac.sum as "2014-03",
-ad.sum as "2014-04",
-ae.sum as "2014-05",
-af.sum as "2014-06",
-ag.sum as "2014-07",
-ah.sum as "2014-08",
-ai.sum as "2014-09",
-aj.sum as "2014-10",
-ak.sum as "2014-11",
-al.sum as "2014-12",
-ba.sum as "2015-01",
-bb.sum as "2015-02",
-bc.sum as "2015-03",
-bd.sum as "2015-04",
-be.sum as "2015-05",
-bf.sum as "2015-06",
-bg.sum as "2015-07",
-bh.sum as "2015-08",
-bi.sum as "2015-09",
-bj.sum as "2015-10",
-bk.sum as "2015-11",
-bl.sum as "2015-12",
-ca.sum as "2016-01",
-cb.sum as "2016-02",
-cc.sum as "2016-03",
-cd.sum as "2016-04",
-ce.sum as "2016-05",
-cf.sum as "2016-06",
-cg.sum as "2016-07",
-ch.sum as "2016-08",
-ci.sum as "2016-09"
-FROM language_dimension as l,
-fact_names as f,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2013 AND month=9 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as a,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2013 AND month=10 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as b,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2013 AND month=11 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as c,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2013 AND month=12 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as d,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2014 AND month=1 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as aa,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2014 AND month=2 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as ab,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2014 AND month=3 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as ac,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2014 AND month=4 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as ad,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2014 AND month=5 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as ae,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2014 AND month=6 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as af,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2014 AND month=7 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as ag,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2014 AND month=8 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as ah,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2014 AND month=9 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as ai,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2014 AND month=10 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as aj,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2014 AND month=11 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as ak,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2014 AND month=12 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as al,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2015 AND month=1 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as ba,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2015 AND month=2 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as bb,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2015 AND month=3 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as bc,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2015 AND month=4 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as bd,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2015 AND month=5 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as be,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2015 AND month=6 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as bf,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2015 AND month=7 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as bg,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2015 AND month=8 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as bh,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2015 AND month=9 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as bi,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2015 AND month=10 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as bj,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2015 AND month=11 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as bk,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2015 AND month=12 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as bl,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2016 AND month=1 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as ca,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2016 AND month=2 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as cb,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2016 AND month=3 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as cc,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2016 AND month=4 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as cd,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2016 AND month=5 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as ce,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2016 AND month=6 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as cf,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2016 AND month=7 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as cg,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2016 AND month=8 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as ch,
-(SELECT l, fact_name, SUM(sum) as sum FROM (SELECT language_id as l, name as fact_name, SUM(amount) as sum FROM facts WHERE year=2016 AND month=9 GROUP BY (language_id, fact_name) UNION SELECT l.language, f.name as fact_name, 0 FROM language_dimension as l, fact_names as f) as x GROUP BY l, fact_name) as ci
-WHERE a.l = l.language AND b.l = l.language AND c.l = l.language AND d.l = l.language AND aa.l = l.language AND ab.l = l.language AND ac.l = l.language AND ad.l = l.language AND ae.l = l.language AND af.l = l.language AND ag.l = l.language AND ah.l = l.language AND ai.l = l.language AND aj.l = l.language AND ak.l = l.language AND al.l = l.language AND ba.l = l.language AND bb.l = l.language AND bc.l = l.language AND bd.l = l.language AND be.l = l.language AND bf.l = l.language AND bg.l = l.language AND bh.l = l.language AND bi.l = l.language AND bj.l = l.language AND bk.l = l.language AND bl.l = l.language AND ca.l = l.language AND cb.l = l.language AND cc.l = l.language AND cd.l = l.language AND ce.l = l.language AND cf.l = l.language AND cg.l = l.language AND ch.l = l.language AND ci.l = l.language
-AND a.fact_name = f.name AND b.fact_name = f.name AND c.fact_name = f.name AND d.fact_name = f.name AND aa.fact_name = f.name AND ab.fact_name = f.name AND ac.fact_name = f.name AND ad.fact_name = f.name AND ae.fact_name = f.name AND af.fact_name = f.name AND ag.fact_name = f.name AND ah.fact_name = f.name AND ai.fact_name = f.name AND aj.fact_name = f.name AND ak.fact_name = f.name AND al.fact_name = f.name AND ba.fact_name = f.name AND bb.fact_name = f.name AND bc.fact_name = f.name AND bd.fact_name = f.name AND be.fact_name = f.name AND bf.fact_name = f.name AND bg.fact_name = f.name AND bh.fact_name = f.name AND bi.fact_name = f.name AND bj.fact_name = f.name AND bk.fact_name = f.name AND bl.fact_name = f.name AND ca.fact_name = f.name AND cb.fact_name = f.name AND cc.fact_name = f.name AND cd.fact_name = f.name AND ce.fact_name = f.name AND cf.fact_name = f.name AND cg.fact_name = f.name AND ch.fact_name = f.name AND ci.fact_name = f.name 
-ORDER BY l.language, fact_name;
-```
+[link](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question_3_results-advanced.csv)
 
 We exported result of query from table *question3*.
 ```sql
 copy (SELECT * FROM question3) TO '/Users/tomek/code/dw/question3.csv' WITH CSV DELIMITER ',' HEADER;
-````
+```
+
+## 8.2. Result of query
+
+### All facts sum up for every language for each month between 09-2013 and 09-2016. 
+
+
+
+### For every programming language, every fact for each month between 09-2013 and 09-2016. 
 
