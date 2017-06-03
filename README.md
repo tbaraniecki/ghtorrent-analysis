@@ -396,11 +396,11 @@ We put that data into Excel and calculate more data.
 
 ## 7.3. Analysing the data
 
-![alt text]( "Percentage distribution of facts concerning the user")
+Analysing table "Average of each fact per user" we can see, that to be successfull user you have to have at least 800 commits, 18 forked repos. Assigning issues to other user means not only that user is successfull but also that he handle the team and that he distributes workload. 
 
-For every fact we will check value change when compared to base value which is value for all users. 
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question2_chart_fact_distribution.png "Percentage distribution of facts concerning the user")
 
-
+As we can see successfull user is 2 times more engaged with participating in talking about project issues. Also is 2 time more engaged in commenting new features (pull comments).
 
 
 ## 7.4. Conclusions on the project
