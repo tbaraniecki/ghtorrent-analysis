@@ -33,6 +33,8 @@ Our study has to answer for:
 2. What makes that user succeeded?
 3. Whats programming languages are rising and what programming languages are going to be forget?
 
+We define success as number for watchers for user and for number of followers for project.
+
 We decided that we will analyze some of the events that occur when developers are using GitHub. 
 As we know, GitHub is repository, as well as project management tool. GitHub is using git, which is distributed repository system. 
 In the table below we wrote events which we are interested in and what they mean for us. For the purpose of this raport we will call those events as facts.
