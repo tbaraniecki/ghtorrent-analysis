@@ -16,13 +16,8 @@
 4.4. [Importing source data](https://github.com/tbaraniecki/ghtorrent-analysis#44-importing-source-data)
 5. [Creating data warehouse](https://github.com/tbaraniecki/ghtorrent-analysis#5-creating-data-warehouse)
 6. [Project](https://github.com/tbaraniecki/ghtorrent-analysis#6-project)
-6.1. [Quering data](https://github.com/tbaraniecki/ghtorrent-analysis#61-quering-data)
-6.2. [Analysing projects data]()
 7. [Users](https://github.com/tbaraniecki/ghtorrent-analysis#7-quering-data-for-users)
 8. [Programming languages](https://github.com/tbaraniecki/ghtorrent-analysis#8-quering-languages-data)
-8.1. []()
-8.2. []()
-9. Conclusions
 
 # 1. Introduction
 
@@ -392,8 +387,6 @@ We put that data into Excel and calculate more data.
 |pull_comment|6|17|19|21|25|29|35|44|64|120|645|
 |sum|394|669|731|806|903|1030|1203|1466|1982|3548|17215|
 
-### Percentage of amount change for facts 
-
 ## 7.3. Analysing the data
 
 Analysing table "Average of each fact per user" we can see, that to be successfull user you have to have at least 800 commits, 18 forked repos. Assigning issues to other user means not only that user is successfull but also that he handle the team and that he distributes workload. 
@@ -402,11 +395,16 @@ Analysing table "Average of each fact per user" we can see, that to be successfu
 
 As we can see successfull user is 2 times more engaged with participating in talking about project issues. Also is 2 time more engaged in commenting new features (pull comments).
 
+## 7.4. Conclusions on the user
 
-## 7.4. Conclusions on the project
+Based on data we have all successfull users have in common following:
+* they mostly report issue and assign it to other users
+* they make more comments on issues - avg for 10% of best users on GitHub is 192
+* they have at least 800 commits
+* they make twice as much comments per pull
+* 1% users on github, which they are cerainly successful they mostly comments on issues (when comparing to all facts concerning issues)
 
-
-# 8. Languages
+# 8. Programming languages
 
 ## 8.1. Quering data
 
@@ -458,8 +456,6 @@ grep "down" question3_short.csv > question3_results_down.csv
 ```
 
 [List of programming languages on GitHub which are not going to survive](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question3_results_down.csv)
-
-
 
 
 
