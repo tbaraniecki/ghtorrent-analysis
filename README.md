@@ -449,13 +449,16 @@ We will take into consideration all facts. We count average monthly amount of ea
 grep "up" question3_short.csv > question3_results_up.csv
 ```
 
-[List of programming languages on GitHub which are rising](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question3_results_up.csv)
+
 
 ```bash
 grep "down" question3_short.csv > question3_results_down.csv
 ```
 
-[List of programming languages on GitHub which are not going to survive](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question3_results_down.csv)
 
+
+### 8.4 Conclusions
+* [List of programming languages on GitHub which are rising](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question3_results_up.csv)
+* [List of programming languages on GitHub which are not going to survive](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question3_results_down.csv)
 
 
