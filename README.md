@@ -222,7 +222,6 @@ We want to know what makes project succeded. So we measure success on amount of 
 |pull|39512989|22854817|22272249|21669761|20921751|20029839|18891960|17305847|14982575|9933774|65034|
 |pull_comment|10019022|7989733|7872238|7741251|7570391|7314754|7025753|6642968|5969090|4326066|24276|
 |watcher|50871849|50490747|50044933|49494892|48789740|47803995|46305788|43528455|34478655|4326066||
-|total|695707898|263363688|254297492|244268064|232189802|218943408|202169751|182435600|155221029|100789244|666389|
 
 We put that data into Excel and calculate more data.
 
@@ -239,11 +238,6 @@ We put that data into Excel and calculate more data.
 |issue_reporter|5.27%|8.50%|8.60%|8.72%|8.88%|8.99%|9.21%|9.41%|9.62%|9.86%|10.54%|
 |pull|5.68%|8.68%|8.76%|8.87%|9.01%|9.15%|9.34%|9.49%|9.65%|9.86%|9.76%|
 |pull_comment|1.44%|3.03%|3.10%|3.17%|3.26%|3.34%|3.48%|3.64%|3.85%|4.29%|3.64%|
-|watcher|
-
-### Percentage of change in comparison to all projects
-
-
 
 ### Average of each fact per project.
 [question1_facts_amount_per_project.csv](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_facts_percentage.csv)
@@ -311,13 +305,13 @@ As we can see fork count is significant bigger for best projects - 5 times or ev
 
 Based on our experience we can say that when project gets bigger forking is used to deliver smaller funcionalities. When comes to open source projects on GitHub we are using successfull one, we fork it to use as our own and not to make a lot of changes and then 
 
-## 6.4. Ginni
+## 6.4. Gini
 
 ![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_ginni_1.png)
 
 ![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_ginni_2.png)
 
-### Value of ginni
+### Value of gini
 
 |fact name| all| 25% of best |
 |:----|----:| ---: |
@@ -434,13 +428,13 @@ Analysing table "Average of each fact per user" we can see, that to be successfu
 
 As we can see successfull user is 2 times more engaged with participating in talking about project issues. Also is 2 time more engaged in commenting new features (pull comments).
 
-## 7.4. Ginni
+## 7.4. Gini
 
 ![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question2_ginni_1.png "Ginni")
 
 ![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question2_ginni_2.png "Ginni")
 
-### Value of ginni
+### Value of gini
 
 |fact name| for all | 25% of best |
 |:----|----:| ---: |
