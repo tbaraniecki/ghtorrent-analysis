@@ -554,5 +554,4 @@ Table with sum of each facts for range 09-2013 and 09-2016.
 
 ![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question3_rozklad.png "null")
 
-
-
+In case we forgot to add data we have. [Here is link to all our results (Google Drive folder archive).](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/dw-20170609T102410Z-001.zip)
