@@ -37,6 +37,34 @@ ORDER BY f.name;
 
 -- time - 2:20
 
+-- 1% best projects 42 344 of 4 234 456
+SELECT f.name, sum(f.amount)
+FROM (SELECT project_id,  count(*) as sum FROM facts
+WHERE name LIKE '%watchers%'
+GROUP BY project_id
+ORDER BY sum desc
+LIMIT 42344) as p,
+facts as f
+WHERE f.project_id = p.project_id
+GROUP BY f.name
+ORDER BY f.name; 
+
+         name         |   sum    
+----------------------+----------
+ commit               | 27728903
+ commit_comment       |   590121
+ forked               |  6325253
+ issue_assignee       |  9938141
+ issue_comment        | 32008567
+ issue_reporter       |  9938141
+ pull                 |  9933732
+ pull_comment         |  4326062
+ watchers             | 34478655
+
+ -- time - ---
+ 
+
+
 -- 4% best projects 169 378 of 4 234 456
 SELECT f.name, sum(f.amount)
 FROM (SELECT project_id,  count(*) as sum FROM facts
@@ -88,6 +116,33 @@ ORDER BY f.name;
 -- watchers             | 46305788
 
 -- time - 6:31
+
+-- 10% best projects 423 445 of 4 234 456
+SELECT f.name, sum(f.amount)
+FROM (SELECT project_id,  count(*) as sum FROM facts
+WHERE name LIKE '%watchers%'
+GROUP BY project_id
+ORDER BY sum desc
+LIMIT 423445) as p,
+facts as f
+WHERE f.project_id = p.project_id
+GROUP BY f.name
+ORDER BY f.name; 
+
+         name         |   sum    
+----------------------+----------
+ commit               | 77957294
+ commit_comment       |  1191043
+ forked               | 10238991
+ issue_assignee       | 18622641
+ issue_comment        | 49617881
+ issue_reporter       | 18622641
+ pull                 | 18891734
+ pull_comment         |  7025496
+ watchers             | 47803995
+
+
+-- time - 
 
 -- 13% best projects 550 479 of 4 234 456
 SELECT f.name, sum(f.amount)
@@ -217,3 +272,14 @@ ORDER BY f.name;
 -- watchers             |  50871849
 
 -- time 6:20
+
+-- 100% best projects 4 234 456
+SELECT f.name, sum(f.amount)
+FROM (SELECT project_id,  count(*) as sum FROM facts
+WHERE name LIKE '%watchers%'
+GROUP BY project_id
+ORDER BY sum desc) as p,
+facts as f
+WHERE f.project_id = p.project_id
+GROUP BY f.name
+ORDER BY f.name;

@@ -302,7 +302,26 @@ As we can see fork count is significant bigger for best projects - 5 times or ev
 
 Based on our experience we can say that when project gets bigger forking is used to deliver smaller funcionalities. When comes to open source projects on GitHub we are using successfull one, we fork it to use as our own and not to make a lot of changes and then 
 
-## 6.4. Conlusion of successfull project
+## 6.4. Ginni
+
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_ginni_1.png)
+
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_ginni_2.png)
+
+
+|fact name| value of ginni |
+|:----|----:|
+| commit | 0.01  (wrong, because value changed) | 
+| commit_comment | 0.25 |
+| forked | 0.67 |
+| issue_assignee | 0.46 |
+| issue_comment | 0.78 |
+| issue_reporter | 0.46 | 
+| pull | 0.42 |
+| pull_comment | 0.69 |
+| watcher | 0.91 |
+
+## 6.5. Conlusion of successfull project
 
 We can easly say that whem your project reaches As we can see from charts above, 1% of best projects of GitHub, which we can call success have different distribution of type of facts per project than all of projects on GitHub. There is almost the same amount of commits as comments for issues. 
 
@@ -397,7 +416,25 @@ Analysing table "Average of each fact per user" we can see, that to be successfu
 
 As we can see successfull user is 2 times more engaged with participating in talking about project issues. Also is 2 time more engaged in commenting new features (pull comments).
 
-## 7.4. Conclusions on the user
+## 7.4. Ginni
+
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question2_ginni_1.png "Ginni")
+
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question2_ginni_2.png "Ginni")
+
+|fact name| value of ginni |
+|:----|----:|
+| commit | 0.21 | 
+| commit_comment | 0.47 |
+| forked | 0.13 |
+| issue_assignee | -0.20 (wrong, because value changed)|
+| issue_comment | 0.53 |
+| issue_reporter | 0.07 | 
+| pull | 0.33 |
+| pull_comment | 0.63 |
+| follower | 0.70  (wrong, because value changed)|
+
+## 7.5. Conclusions on the user
 
 Based on data we have all successfull users have in common following:
 * they mostly report issue and assign it to other users
@@ -451,16 +488,67 @@ We will take into consideration all facts. We count average monthly amount of ea
 grep "up" question3_short.csv > question3_results_up.csv
 ```
 
-
-
 ```bash
 grep "down" question3_short.csv > question3_results_down.csv
 ```
-
-
-
-### 8.4 Conclusions
 * [List of programming languages on GitHub which are rising](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question3_results_up.csv)
 * [List of programming languages on GitHub which are not going to survive](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question3_results_down.csv)
+
+## 8.4. Analysing most popular languages from top100 projects (based on followers count)
+
+|language_id  | count | going up / down |
+|:--------|-----:|:---:|
+|JavaScript   |    37|  up |
+|Python       |     9| up |
+|HTML         |     6| up |
+|Ruby         |     5| down |
+|CSS          |     4| down |
+|C++          |     4| up |
+|Go           |     3| up |
+|TypeScript   |     3| up |
+|Objective-C  |     2| down |
+|C            |     2| up |
+|CoffeeScript |     2| down |
+|Java         |     2| up |
+|Shell        |     2| up |
+|Swift        |     2| up |
+|Assembly     |     1| up |
+|Rust         |     1| up |
+|PHP          |     1| down |
+
+Interesting thing, that 14 of top100 projects were not assigned to any programming language. 
+
+For most popular languages we prepare table with facts count.
+
+Let's take Swift na Objective-C. Same platform. Swift has everyting up so it is strictly rising. Objective-C on the other hand has downwards trend for number of issues. 
+
+Table with sum of each facts for range 09-2013 and 09-2016.
+
+[question3_facts_popular_languages.csv](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question3_facts_popular_languages.csv)
+
+||Assembly|C|C++|CSS|CoffeeScript|Go|HTML|Java|JavaScript|Objective-C|PHP|Python|Ruby|Rust|Shell|Swift|TypeScript|
+|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+|commit|285704|15995290|19283802|17961527|1771160|4171572|22889236|37864672|53438356|4071551|21667925|30637459|19851633|959057|12092961|1920852|871808|
+|commit_comment|1846|213263|333111|68188|18200|78965|84789|349945|379342|30105|193197|334279|240606|69664|53167|7860|13046|
+|forked|10073|471353|474139|485056|81352|198629|468189|1354211|2267641|392122|657587|975073|770710|26807|281420|103034|43629|
+|issue_assignee|10386|862163|1388962|891427|265479|594983|1334226|2825521|5512323|377144|2058457|2909899|2088998|131308|497542|151310|166254|
+|issue_comment|17403|2256924|3561852|956244|561721|1933782|1676068|5025047|9789484|742767|3866149|6069159|3290574|377867|964327|243976|414998|
+|issue_reporter|10386|862163|1388962|891427|265479|594983|1334226|2825521|5512323|377144|2058457|2909899|2088998|131308|497542|151310|166254|
+|pull|11360|885130|1508968|1095270|232894|686480|1676105|3082641|5743672|337584|2200328|3231595|2931022|160492|581143|160457|151781|
+|pull_comment|1807|246590|563022|160925|58533|461728|268994|1029768|1279536|71477|499604|1315307|1120063|62776|86939|34734|69728|
+|watchers|56378|1789310|1770678|1251443|432174|1693332|1272487|4481411|11059564|2437502|1937086|3781895|1912040|177770|1036592|1110937|212054|
+
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question3_rozlad.png "null")
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -39,6 +39,32 @@ ORDER BY f.name;
 
 -- time - 1:32
 
+-- 1% of most followed users - 17905 of 1790539
+SELECT f.name, sum(f.amount)
+FROM (SELECT user_id, sum(amount) as sum FROM facts
+WHERE name LIKE '%follower%'
+GROUP BY user_id
+ORDER BY sum desc
+LIMIT 17905) as p,
+facts as f
+WHERE f.user_id = p.user_id
+GROUP BY f.name
+ORDER BY f.name; 
+
+--         name         |   sum    
+------------------------+----------
+-- commit               | 39492783
+-- commit_comment       |   566646
+-- follower             |  4378478
+-- forked               |   642165
+-- issue_assignee       |   322552
+-- issue_comment        | 14025246
+-- issue_reporter       |  2186028
+-- pull                 |  4129509
+-- pull_comment         |  2154402
+-- watchers             |  4700116
+
+
 -- 4% of most followed users - 71622 of 1790539
 SELECT f.name, sum(f.amount)
 FROM (SELECT user_id, sum(amount) as sum FROM facts
@@ -90,6 +116,35 @@ ORDER BY f.name;
 -- pull                 |  12945700
 -- pull_comment         |   5460781
 -- watchers             |  18185338
+
+-- time 6:00
+
+-- 10% of most followed users - 179053 of 1790539
+SELECT f.name, sum(f.amount)
+FROM (SELECT user_id, sum(amount) as sum FROM facts
+WHERE name LIKE '%follower%'
+GROUP BY user_id
+ORDER BY sum desc
+LIMIT 179053) as p,
+facts as f
+WHERE f.user_id = p.user_id
+GROUP BY f.name
+ORDER BY f.name; 
+
+         name         |    sum    
+----------------------+-----------
+ commit               | 146159676
+ commit_comment       |   1696279
+ follower             |   7896039
+ forked               |   3253914
+ issue_assignee       |   1168304
+ issue_comment        |  34290293
+ issue_reporter       |   7583513
+ pull                 |  15103606
+ pull_comment         |   6229458
+ watchers             |  22382252
+
+
 
 -- time 6:00
 
@@ -227,3 +282,27 @@ ORDER BY f.name;
 -- watchers             |  33656761
  
  -- time - 5:21
+
+ -- 100% of most followed users - 1790539
+SELECT f.name, sum(f.amount)
+FROM (SELECT user_id, sum(amount) as sum FROM facts
+WHERE name LIKE '%follower%'
+GROUP BY user_id
+ORDER BY sum desc) as p,
+facts as f
+WHERE f.user_id = p.user_id
+GROUP BY f.name
+ORDER BY f.name; 
+
+         name         |    sum
+----------------------+-----------
+ commit               | 303914293
+ commit_comment       |   2856253
+ follower             |  11616754
+ forked               |   8582080
+ issue_assignee       |   2413726
+ issue_comment        |  52735515
+ issue_reporter       |  14531591
+ pull                 |  28172525
+ pull_comment         |   9108639
+ watchers             |  45438548
