@@ -538,17 +538,5 @@ Table with sum of each facts for range 09-2013 and 09-2016.
 |pull_comment|1807|246590|563022|160925|58533|461728|268994|1029768|1279536|71477|499604|1315307|1120063|62776|86939|34734|69728|
 |watchers|56378|1789310|1770678|1251443|432174|1693332|1272487|4481411|11059564|2437502|1937086|3781895|1912040|177770|1036592|1110937|212054|
 
-![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question3_rozlad.png "null")
-
-
-
-
-
-
-
-
-
-
-
-
+![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question3_rozklad.png "null")
 
