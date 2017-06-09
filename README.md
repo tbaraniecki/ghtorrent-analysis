@@ -308,18 +308,19 @@ Based on our experience we can say that when project gets bigger forking is used
 
 ![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question1_ginni_2.png)
 
+### Value of ginni
 
-|fact name| value of ginni |
-|:----|----:|
-| commit | 0.01  (wrong, because value changed) | 
-| commit_comment | 0.25 |
-| forked | 0.67 |
-| issue_assignee | 0.46 |
-| issue_comment | 0.78 |
-| issue_reporter | 0.46 | 
-| pull | 0.42 |
-| pull_comment | 0.69 |
-| watcher | 0.91 |
+|fact name| all| 25% of best |
+|:----|----:| ---: |
+| commit | 0.04 | 0.36 |
+| commit_comment | 0.25 | 0.57 |
+| forked | 0.67 | 0.73 |
+| issue_assignee | 0.46 | 0.75 |
+| issue_comment | 0.78 | 0.77 | 
+| issue_reporter | 0.46 | 0.63 |
+| pull | 0.42 | 0.62|
+| pull_comment | 0.69 | 0.71 |
+| watcher | 0.91 | 0.66 |
 
 ## 6.5. Conlusion of successfull project
 
@@ -422,17 +423,19 @@ As we can see successfull user is 2 times more engaged with participating in tal
 
 ![alt text](https://github.com/tbaraniecki/ghtorrent-analysis/blob/master/question2_ginni_2.png "Ginni")
 
-|fact name| value of ginni |
-|:----|----:|
-| commit | 0.21 | 
-| commit_comment | 0.47 |
-| forked | 0.13 |
-| issue_assignee | -0.20 (wrong, because value changed)|
-| issue_comment | 0.53 |
-| issue_reporter | 0.07 | 
-| pull | 0.33 |
-| pull_comment | 0.63 |
-| follower | 0.70  (wrong, because value changed)|
+### Value of ginni
+
+|fact name| for all | 25% of best |
+|:----|----:| ---: |
+| commit | 0.21 | 0.41 |
+| commit_comment | 0.47 | 0.52 |
+| forked | 0.13 | 0.30 |
+| issue_assignee | 0.21 | 0.74 |
+| issue_comment | 0.53 | 0.56 |
+| issue_reporter | 0.07 | 0.44 |
+| pull | 0.33 | 0.44 |
+| pull_comment | 0.63 | 0.56 |
+| follower | 0.70 | 0.63 |
 
 ## 7.5. Conclusions on the user
 
